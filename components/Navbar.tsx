@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ShoppingCart, Search } from "lucide-react"; // Pakai lucide-react biar icon-nya cakep
+import { ShoppingCart, Search, DoorClosedLocked } from "lucide-react"; // Pakai lucide-react biar icon-nya cakep
 import Link from "next/link";
 
 const Navbar: React.FC = () => {
@@ -37,9 +37,9 @@ const Navbar: React.FC = () => {
             placeholder="Cari produk disini..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-background border-none rounded-full py-2.5 px-5 pl-12 focus:ring-2 ring-2 ring-white focus:ring-emerald-500 transition-all outline-none "
+            className="w-full bg-background border-none rounded-full py-2.5 px-5 pl-12 focus:ring-2 ring-2 ring-white focus:ring-orange-500 transition-all outline-none "
           />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-background dark:text-foreground  group-focus-within:text-emerald-600 w-5 h-5" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-background dark:text-foreground  group-focus-within:text-orange-500 w-5 h-5" />
         </form>
 
         {/* keranjang dan pencarian hp */}
@@ -57,6 +57,10 @@ const Navbar: React.FC = () => {
                 {cartCount}
               </span>
             )}
+          </button>
+
+          <button className="relative p-2 text-background dark:text-foreground hover:bg-orange-500 rounded-full transition">
+            <DoorClosedLocked className="w-6 h-6" />
           </button>
         </div>
       </div>
