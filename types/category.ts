@@ -16,10 +16,10 @@ export type KategoriType =
   | "Fashion"
   | "Hasil Bumi";
 
-export interface KategoriMap {
+export type KategoriMap = {
   name: KategoriType;
   icon: LucideIcon;
-}
+};
 
 export const KategoriIcon: KategoriMap[] = [
   { name: "Semua", icon: LayoutGrid },
