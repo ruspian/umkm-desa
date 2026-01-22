@@ -11,6 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 
@@ -18,13 +19,11 @@ datasource db {
 // --- ENUMS ---
 // Memastikan data kategori dan status konsisten di seluruh aplikasi
 enum Category {
-  MAKANAN
-  KERAJINAN
-  FASHION
-  PERTANIAN
-  HASIL_LAUT
-  JASA
-  LAINNYA
+  Makanan
+  Kerajinan
+  Fashion
+  Minuman
+  Lainnya
 }
 
 enum Role {
@@ -33,8 +32,6 @@ enum Role {
   PENJUAL
 }
 
-// --- AUTH.JS MODELS ---
-// Model standar yang dibutuhkan @auth/prisma-adapter
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -88,20 +85,20 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// --- BUSINESS MODELS ---
+// model Produk
 model Product {
   id          String   @id @default(cuid())
   name        String
-  slug        String   @unique // Contoh: "keripik-pisang-desa"
+  slug        String   @unique 
   description String   @db.Text
-  price       Int      // Simpan dalam Rupiah utuh
-  discount    Int      @default(0) // Persentase diskon
+  price       Int      
+  discount    Int      @default(0) 
   stock       Int      @default(0)
-  images      String[] // Array URL gambar (Uploadthing/Cloudinary)
-  category    Category @default(MAKANAN)
-  isFeatured  Boolean  @default(false) // Untuk muncul di section "Unggulan"
+  images      String[] 
+  category    Category @default(Makanan)
+  isFeatured  Boolean  @default(false) 
   
-  // Relasi ke User (Penjual)
+  // Relasi ke User 
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

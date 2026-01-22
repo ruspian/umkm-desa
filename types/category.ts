@@ -14,7 +14,7 @@ export type KategoriType =
   | "Kerajinan"
   | "Minuman"
   | "Fashion"
-  | "Hasil Bumi";
+  | "Lainnya";
 
 export type KategoriMap = {
   name: KategoriType;
@@ -27,5 +27,5 @@ export const KategoriIcon: KategoriMap[] = [
   { name: "Minuman", icon: Milk },
   { name: "Kerajinan", icon: Scissors },
   { name: "Fashion", icon: Shirt },
-  { name: "Hasil Bumi", icon: Leaf },
+  { name: "Lainnya", icon: Leaf },
 ];
