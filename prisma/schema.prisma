@@ -84,6 +84,11 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+enum StatusProduct {
+  Pending
+  Approved
+  Rejected
+}
 
 // model Produk
 model Product {
@@ -97,6 +102,7 @@ model Product {
   images      String[] 
   category    Category @default(Makanan)
   isFeatured  Boolean  @default(false) 
+  status      StatusProduct @default(Pending)
   
   // Relasi ke User 
   userId      String

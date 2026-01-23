@@ -1,67 +1,77 @@
 "use client";
 
 import React, { useState } from "react";
-import { ShoppingCart, Search, DoorClosedLocked } from "lucide-react"; // Pakai lucide-react biar icon-nya cakep
+import { ShoppingCart, Search, LogIn } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import ProfilDropdown from "./ProfilDropdown";
 
 const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [cartCount, setCartCount] = useState<number>(0); // Nanti bisa disambung ke state management
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Mencari:", searchQuery);
-    // Logic pencarian produk UMKM di sini
-  };
+  const { status } = useSession();
 
   return (
-    <nav className="bg-foreground dark:bg-background shadow-sm border-b sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-4">
-        {/*logo */}
+    <nav className="sticky top-0 z-100 w-full px-4 pt-4">
+      {/* Container utama dengan efek Glassmorphism */}
+      <div className="max-w-7xl mx-auto h-16 md:h-20 bg-foreground/80 dark:bg-background/80 backdrop-blur-xl border  shadow-2xl shadow-gray-200/50 dark:shadow-none rounded-lg px-6 flex items-center justify-between gap-6 transition-all">
+        {/* logo */}
         <div className="shrink-0">
-          <Link
-            href="/"
-            className="text-2xl font-bold text-background dark:text-foreground"
-          >
-            Asli<span className="text-orange-500">Sini</span>
+          <Link href="/" className="group flex items-center gap-1">
+            <div className="w-10 h-10 bg-orange-600 rounded-2xl flex items-center justify-center text-white rotate-3 group-hover:rotate-0 transition-transform duration-300">
+              <span className="font-black text-xl">A</span>
+            </div>
+            <span className="text-2xl font-black tracking-tighter text-background dark:text-foreground hidden md:block">
+              Asli<span className="text-orange-600">Sini</span>
+            </span>
           </Link>
         </div>
 
-        {/*pencarian */}
-        <form
-          onSubmit={handleSearch}
-          className="flex-1 max-w-2xl relative group hidden sm:block"
-        >
+        {/* bar pencarian */}
+        <form className="flex-1 max-w-xl relative group hidden sm:block">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search className="w-5 h-5 text-gray-400 group-focus-within:text-orange-600 transition-colors" />
+          </div>
           <input
             type="text"
-            placeholder="Cari produk disini..."
+            placeholder="Cari kerajinan atau camilan khas..."
+            className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl py-3 px-12 text-sm font-medium focus:ring-2 focus:ring-orange-500 focus:bg-zinc-100 dark:focus:bg-orange-500 transition-all outline-none"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-background border-none rounded-full py-2.5 px-5 pl-12 focus:ring-2 ring-2 ring-white focus:ring-orange-500 transition-all outline-none "
           />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-background dark:text-foreground  group-focus-within:text-orange-500 w-5 h-5" />
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex h-6 select-none items-center gap-1 rounded border bg-white dark:bg-gray-900 px-1.5 font-mono text-[10px] font-medium text-gray-400 opacity-100 uppercase">
+            ⌘ K
+          </kbd>
         </form>
 
-        {/* keranjang dan pencarian hp */}
-        <div className="flex items-center gap-3">
-          {/* ikon pencarian */}
-          <button className="sm:hidden p-2 text-background dark:text-foreground">
-            <Search className="w-6 h-6" />
+        {/* menu aksi */}
+        <div className="flex items-center gap-2">
+          {/* pencarian hp */}
+          <button className="sm:hidden p-3 text-background dark:text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 rounded-2xl transition-colors">
+            <Search className="w-5 h-5" />
           </button>
 
-          {/* ikon keranjang */}
-          <button className="relative p-2 text-background dark:text-foreground hover:bg-orange-500 rounded-full transition">
-            <ShoppingCart className="w-6 h-6" />
-            {cartCount > 0 && (
-              <span className="absolute top-0 right-0 bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">
-                {cartCount}
+          {/* Keranjang  */}
+          <button className="relative p-3 text-background dark:text-foreground hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:text-orange-600 rounded-2xl transition-all">
+            <ShoppingCart className="w-5 h-5" />
+            <span className="absolute top-2 right-2 flex h-4 w-4">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-orange-600 text-[10px] font-black text-white items-center justify-center">
+                3
               </span>
-            )}
+            </span>
           </button>
 
-          <button className="relative p-2 text-background dark:text-foreground hover:bg-orange-500 rounded-full transition">
-            <DoorClosedLocked className="w-6 h-6" />
-          </button>
+          {status === "authenticated" ? (
+            <ProfilDropdown />
+          ) : (
+            <Link
+              href="/login"
+              className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-bold text-sm hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all shadow-lg shadow-gray-200 dark:shadow-none active:scale-95"
+            >
+              <LogIn className="w-4 h-4" />
+              <span className="hidden md:inline">Masuk</span>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

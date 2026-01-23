@@ -106,7 +106,13 @@ export default function GamifiedLoginCard() {
         className="relative z-10 w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 flex flex-col gap-6"
       >
         <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100">
-          {success ? "Welcome!" : "Sign In"}
+          {success ? (
+            "Selamat Datang!"
+          ) : (
+            <p className="text-foreground dark:text-background">
+              Asli<span className="text-orange-500">Sini</span>
+            </p>
+          )}
         </h2>
 
         {error && (
@@ -154,7 +160,7 @@ export default function GamifiedLoginCard() {
         {!success && (
           <p className="text-center text-sm text-gray-500 dark:text-gray-300 mt-2">
             Belum punya akun?{" "}
-            <Link href="/register" className="text-purple-500 hover:underline">
+            <Link href="/register" className="text-orange-500 hover:underline">
               Daftar!
             </Link>
           </p>
