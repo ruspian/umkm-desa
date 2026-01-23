@@ -34,7 +34,11 @@ const Navbar: React.FC = () => {
           <input
             type="text"
             placeholder="Cari kerajinan atau camilan khas..."
+<<<<<<< HEAD
             className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl py-3 px-12 text-sm font-medium focus:ring-2 focus:ring-orange-500 focus:bg-zinc-100 dark:focus:bg-orange-500 transition-all outline-none"
+=======
+            className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl py-3 px-12 text-sm font-medium focus:ring-2 focus:ring-orange-500/20 focus:bg-white dark:focus:bg-gray-700 transition-all outline-none"
+>>>>>>> 6e6c6e3c7aae4aa30b7e5853d49ce3525439116f
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -43,6 +47,7 @@ const Navbar: React.FC = () => {
           </kbd>
         </form>
 
+<<<<<<< HEAD
         {/* menu aksi */}
         <div className="flex items-center gap-2">
           {/* pencarian hp */}
@@ -51,6 +56,16 @@ const Navbar: React.FC = () => {
           </button>
 
           {/* Keranjang  */}
+=======
+        {/* Actions Menu */}
+        <div className="flex items-center gap-2">
+          {/* tampilan pencarian hp */}
+          <button className="sm:hidden p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-2xl transition-colors">
+            <Search className="w-5 h-5" />
+          </button>
+
+          {/* Keranjang dengan Badge Modern */}
+>>>>>>> 6e6c6e3c7aae4aa30b7e5853d49ce3525439116f
           <button className="relative p-3 text-background dark:text-foreground hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:text-orange-600 rounded-2xl transition-all">
             <ShoppingCart className="w-5 h-5" />
             <span className="absolute top-2 right-2 flex h-4 w-4">

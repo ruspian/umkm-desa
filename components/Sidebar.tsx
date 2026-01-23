@@ -20,17 +20,29 @@ const Sidebar = () => {
     {
       name: "Daftar Pengguna",
       icon: <Users size={20} />,
+<<<<<<< HEAD
       href: "/admin/users",
+=======
+      href: "/dashboard/admin/users",
+>>>>>>> 6e6c6e3c7aae4aa30b7e5853d49ce3525439116f
     },
     {
       name: "Kurasi Produk",
       icon: <ShoppingBag size={20} />,
+<<<<<<< HEAD
       href: "/admin/products",
+=======
+      href: "/dashboard/admin/products",
+>>>>>>> 6e6c6e3c7aae4aa30b7e5853d49ce3525439116f
     },
     {
       name: "Konfigurasi",
       icon: <Settings size={20} />,
+<<<<<<< HEAD
       href: "/admin/konfigurasi",
+=======
+      href: "/dashboard/admin/settings",
+>>>>>>> 6e6c6e3c7aae4aa30b7e5853d49ce3525439116f
     },
   ];
   return (
