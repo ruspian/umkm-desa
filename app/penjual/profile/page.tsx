@@ -15,7 +15,7 @@ export default function PenjualProfilePage() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="p-4 md:p-10 max-w-[1200px] mx-auto space-y-10 animate-in fade-in duration-700">
+    <div className="p-4 md:p-10 max-w-300 mx-auto space-y-10 animate-in fade-in duration-700">
       {/* HEADER & ACTIONS */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
