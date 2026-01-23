@@ -118,7 +118,7 @@ export default function GamifiedRegisterCard() {
         className="relative z-10 w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 flex flex-col gap-6"
       >
         <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100">
-          {success ? "Welcome!" : "Sign In"}
+          {success ? "Selamat!" : "Daftar!"}
         </h2>
 
         {error && (
@@ -177,7 +177,7 @@ export default function GamifiedRegisterCard() {
         {!success && (
           <p className="text-center text-sm text-gray-500 dark:text-gray-300 mt-2">
             Sudah Punya akun?{" "}
-            <Link href="/login" className="text-purple-500 hover:underline">
+            <Link href="/login" className="text-orange-500 hover:underline">
               Masuk
             </Link>
           </p>
