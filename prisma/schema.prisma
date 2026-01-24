@@ -99,7 +99,7 @@ model Product {
   price       Int      
   discount    Int      @default(0) 
   stock       Int      @default(0)
-  images      String[] 
+  images      String 
   category    Category @default(Makanan)
   isFeatured  Boolean  @default(false) 
   status      StatusProduct @default(Pending)
