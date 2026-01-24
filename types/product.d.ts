@@ -1,3 +1,5 @@
+import { KategoriType } from "./category";
+
 export type ProductType = {
   id: string;
   nama: string;
@@ -6,6 +8,6 @@ export type ProductType = {
   discount: number;
   stock: number;
   images: string;
-  category: string;
+  category: KategoriType;
   status?: "Pending" | "Approved" | "Rejected";
 };

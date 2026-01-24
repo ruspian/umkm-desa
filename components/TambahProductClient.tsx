@@ -1,10 +1,11 @@
 "use client";
 
+import { AddProduct } from "@/lib/action";
 import {
   deleteFromCloudinary,
   uploadToCloudinarySigned,
 } from "@/lib/cloudinary";
-import { KategoriIcon } from "@/types/category";
+import { KategoriIcon, KategoriType } from "@/types/category";
 import { ProductType } from "@/types/product";
 import {
   ImagePlus,
@@ -16,6 +17,7 @@ import {
   ListTodo,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -24,7 +26,7 @@ export default function TambahPoductClient() {
     id: "",
     nama: "",
     description: "",
-    category: "",
+    category: "Semua" as KategoriType,
     price: 0,
     images: "",
     discount: 0,
@@ -32,15 +34,12 @@ export default function TambahPoductClient() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const router = useRouter();
+
   const handleChangeInput = (name: string, value: unknown) => {
-    console.log(`mengetik ${name} ${value}`);
     setFormData((prev) => ({
       ...prev,
-      [name]: ["price", "discount", "stock"].includes(name)
-        ? value === ""
-          ? 0
-          : Number(value)
-        : value,
+      [name]: value,
     }));
   };
 
@@ -51,12 +50,6 @@ export default function TambahPoductClient() {
 
     toast.promise(
       async () => {
-        await uploadToCloudinarySigned({
-          file: file[0],
-          folder: "umkm",
-          resourceType: "image",
-        });
-
         const url = await uploadToCloudinarySigned({
           file: file[0],
           folder: "umkm",
@@ -106,7 +99,35 @@ export default function TambahPoductClient() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(formData);
+    if (
+      !formData.images ||
+      !formData.nama ||
+      !formData.price ||
+      !formData.stock
+    ) {
+      toast.warning("Data belum lengkap!");
+      return;
+    }
+    toast.promise(
+      async () => {
+        setIsSubmitting(true);
+
+        const result = await AddProduct(formData);
+
+        if (!result.success) {
+          throw new Error(result.message || "Terjadi kesalahan!");
+        }
+
+        router.push("/penjual/produk-saya");
+        setIsSubmitting(false);
+        return result;
+      },
+      {
+        loading: "Sedang menambahkan produk...",
+        success: (res) => res.message,
+        error: (err) => err.message,
+      },
+    );
   };
 
   return (
@@ -185,9 +206,9 @@ export default function TambahPoductClient() {
                 />
                 <input
                   type="text"
-                  name="name"
+                  name="nama"
                   value={formData.nama}
-                  onChange={(e) => handleChangeInput("name", e.target.value)}
+                  onChange={(e) => handleChangeInput("nama", e.target.value)}
                   placeholder="Contoh: Keripik Singkong Pedas"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
                 />
@@ -309,7 +330,8 @@ export default function TambahPoductClient() {
 
           <button
             type="submit"
-            className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-orange-200 dark:shadow-none hover:bg-orange-700 transition-all active:scale-95"
+            className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-orange-200 dark:shadow-none hover:bg-orange-700 transition-all active:scale-95 disabled:bg-orange-600/50 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
           >
             Daftarkan Produk Sekarang
           </button>

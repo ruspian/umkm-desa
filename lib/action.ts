@@ -2,10 +2,14 @@
 
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
-import { Prisma, Role } from "@prisma/client";
+import { Category, Prisma, Role } from "@prisma/client";
 import { Register } from "@/types/register";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryDelete, CloudinaryUpload } from "@/types/cloudinary";
+import { ProductType } from "@/types/product";
+import { auth } from "./auth";
+import slugify from "slugify";
+import { revalidatePath } from "next/cache";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -143,6 +147,72 @@ export const DeleteImage = async (data: CloudinaryDelete) => {
     };
   } catch (error) {
     console.log("Gagal menghapus foto di cloudinary:", error);
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi tambah produk
+export const AddProduct = async (data: ProductType) => {
+  const session = await auth();
+  const userId = session?.user.id;
+
+  if (!session?.user || session?.user.role !== "PENJUAL") {
+    return {
+      message: "Akses ditolak, Silahkan Login!",
+      success: false,
+    };
+  }
+
+  try {
+    const { nama, description, images, stock, discount, price, category } =
+      data;
+
+    if (!nama || !images || !price || !stock) {
+      return {
+        message: "Data belum lengkap!",
+        success: false,
+      };
+    }
+
+    if (category === "Semua") {
+      return {
+        message: "Kategori belum dipilih!",
+        success: false,
+      };
+    }
+
+    const generateSlug = slugify(nama, { lower: true });
+    const slug = generateSlug + "-" + Math.floor(Math.random() * 1000);
+
+    const newProduct = await prisma.product.create({
+      data: {
+        name: nama,
+        description,
+        slug,
+        images,
+        stock: Number(stock),
+        discount: Number(discount),
+        price: Number(price),
+        category: category as Category,
+        userId: userId as string,
+        status: "Pending",
+      },
+    });
+
+    revalidatePath("/penjual/produk-saya");
+    revalidatePath("/admin/products");
+    revalidatePath("/");
+
+    return {
+      message: "Produk berhasil ditambahkan!",
+      success: true,
+      data: newProduct,
+    };
+  } catch (error) {
+    console.log("gagal menambahkan product: ", error);
     return {
       message: "Kesalahan pada server!",
       success: false,
