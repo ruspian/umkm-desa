@@ -11,3 +11,10 @@ export type ProductType = {
   category: KategoriType;
   status?: "Pending" | "Approved" | "Rejected";
 };
+
+export type ProductProps = {
+  products: ProductType[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+};
