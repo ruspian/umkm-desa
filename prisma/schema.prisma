@@ -40,14 +40,35 @@ model User {
   image         String?
   password      String?   // Wajib untuk Credentials/JWT
   role          Role      @default(USER)
+  toko          Toko?
   
   // Relasi
   accounts      Account[]
   sessions      Session[]
-  products      Product[] // Relasi ke produk yang dijual
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+}
+
+model Toko {
+  id          String   @id @default(cuid())
+  namaToko    String   @unique
+  slug        String   @unique
+  deskripsi   String?  @db.Text
+  logo        String?  
+  alamat      String?  @db.Text
+  noWhatsapp  String?
+  isVerified  Boolean  @default(false)
+  
+  // Relasi ke User
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relasi ke Produk 
+  products    Product[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Account {
@@ -104,15 +125,15 @@ model Product {
   isFeatured  Boolean  @default(false) 
   status      StatusProduct @default(Pending)
   
-  // Relasi ke User 
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Relasi ke Toko
+  tokoId      String
+  toko        Toko     @relation(fields: [tokoId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Indexing untuk performa filter di database
-  @@index([userId])
+  @@index([tokoId])
   @@index([category])
   @@index([isFeatured])
 }

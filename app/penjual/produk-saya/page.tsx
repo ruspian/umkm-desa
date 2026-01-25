@@ -18,7 +18,7 @@ export default async function MyProductsPage({
   const limit = 10;
   const page = Math.max(1, Number(params.page) || 1);
 
-  const userId = session?.user.id;
+  const tokoId = session?.user.tokoId;
 
   if (!session?.user || session?.user.role !== "PENJUAL") {
     return redirect("/");
@@ -26,7 +26,7 @@ export default async function MyProductsPage({
 
   // Bangun kondisi query yang bersih
   const whereCondition: Prisma.ProductWhereInput = {
-    userId: userId,
+    tokoId: tokoId,
     // Gunakan pengecekan kondisional yang aman untuk Prisma
     ...(status && status !== "semua"
       ? { status: status as StatusProduct }

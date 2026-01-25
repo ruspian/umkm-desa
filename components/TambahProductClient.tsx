@@ -160,7 +160,7 @@ export default function TambahPoductClient() {
                   unoptimized
                 />
 
-                {/* Overlay untuk Ganti/Hapus */}
+                {/* Overlay untuk Hapus */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                   <button
                     type="button"

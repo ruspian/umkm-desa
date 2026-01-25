@@ -30,6 +30,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: {
             email: credentials.email as string,
           },
+          include: {
+            toko: {
+              select: {
+                id: true,
+              },
+            },
+          },
         });
 
         // jika user atau password tidak cocok, kembalikan null
@@ -54,6 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           image: user.image,
           role: user.role as Role,
+          tokoId: user.toko?.id,
         };
       },
     }),
@@ -67,6 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.email = user.email;
         token.image = user.image;
         token.role = user.role as Role;
+        token.tokoId = user.tokoId;
       }
 
       return token;
@@ -78,6 +87,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.email = token.email as string;
         session.user.image = token.image as string;
         session.user.role = token.role as Role;
+        session.user.tokoId = token.tokoId as string;
       }
 
       return session;

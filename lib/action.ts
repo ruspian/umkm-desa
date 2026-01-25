@@ -10,6 +10,7 @@ import { ProductType } from "@/types/product";
 import { auth } from "./auth";
 import slugify from "slugify";
 import { revalidatePath } from "next/cache";
+import { TokoType } from "@/types/toko";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -157,7 +158,14 @@ export const DeleteImage = async (data: CloudinaryDelete) => {
 // fungsi tambah produk
 export const AddProduct = async (data: ProductType) => {
   const session = await auth();
-  const userId = session?.user.id;
+  const tokoId = session?.user.tokoId;
+
+  if (!tokoId) {
+    return {
+      message: "Toko tidak ditemukan!",
+      success: false,
+    };
+  }
 
   if (!session?.user || session?.user.role !== "PENJUAL") {
     return {
@@ -197,7 +205,7 @@ export const AddProduct = async (data: ProductType) => {
         discount: Number(discount),
         price: Number(price),
         category: category as Category,
-        userId: userId as string,
+        tokoId: tokoId as string,
         status: "Pending",
       },
     });
@@ -213,6 +221,77 @@ export const AddProduct = async (data: ProductType) => {
     };
   } catch (error) {
     console.log("gagal menambahkan product: ", error);
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi buat profil toko
+export const CreateToko = async (data: TokoType) => {
+  const session = await auth();
+
+  if (!session?.user || session?.user.role !== "PENJUAL") {
+    return {
+      message: "Akses ditolak, Silahkan Login!",
+      success: false,
+    };
+  }
+
+  try {
+    const { namaToko, deskripsi, logo, alamat, noWhatsapp } = data;
+
+    if (!namaToko || !deskripsi || !logo || !alamat || !noWhatsapp) {
+      return {
+        message: "Data belum lengkap!",
+        success: false,
+      };
+    }
+
+    const generateSlug = slugify(namaToko, { lower: true });
+    const slug = generateSlug + "-" + Math.floor(Math.random() * 1000);
+
+    const toko = await prisma.toko.upsert({
+      where: { userId: session.user.id },
+      update: {
+        namaToko,
+        deskripsi,
+        logo,
+        alamat,
+        noWhatsapp,
+      },
+      create: {
+        namaToko,
+        deskripsi,
+        logo,
+        alamat,
+        noWhatsapp,
+        slug,
+        userId: session.user.id,
+      },
+    });
+
+    revalidatePath("/penjual/profile");
+    revalidatePath(`/seller/${toko.slug}`);
+
+    return {
+      message: "Profil toko berhasil disimpan!",
+      success: true,
+      data: toko,
+    };
+  } catch (error: unknown) {
+    console.log("gagal buat profile toko:", error);
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return {
+          message: "Nama toko sudah digunakan!",
+          success: false,
+        };
+      }
+    }
+
     return {
       message: "Kesalahan pada server!",
       success: false,
