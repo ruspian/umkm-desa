@@ -228,6 +228,75 @@ export const AddProduct = async (data: ProductType) => {
   }
 };
 
+// fungsi edit produk
+export const EditProduct = async (data: ProductType) => {
+  const session = await auth();
+
+  if (!session?.user || session?.user.role !== "PENJUAL") {
+    return {
+      message: "Akses ditolak, Silahkan Login!",
+      success: false,
+    };
+  }
+
+  try {
+    const {
+      nama,
+      description,
+      images,
+      stock,
+      discount,
+      price,
+      category,
+      slug,
+    } = data;
+
+    if (!nama || !images || !price || !stock) {
+      return {
+        message: "Data belum lengkap!",
+        success: false,
+      };
+    }
+
+    if (category === "Semua") {
+      return {
+        message: "Kategori belum dipilih!",
+        success: false,
+      };
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { slug: slug as string },
+      data: {
+        name: nama,
+        description,
+        images,
+        stock: Number(stock),
+        discount: Number(discount),
+        price: Number(price),
+        category: category as Category,
+      },
+    });
+
+    revalidatePath("/penjual/produk-saya");
+    revalidatePath("/admin/products");
+    revalidatePath("/");
+
+    return {
+      message: "Produk berhasil diperbarui!",
+      success: true,
+      data: updatedProduct,
+    };
+  } catch (error) {
+    console.log("gagal edit product:", error);
+
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
 // fungsi buat profil toko
 export const CreateToko = async (data: TokoType) => {
   const session = await auth();

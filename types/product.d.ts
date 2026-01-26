@@ -9,6 +9,7 @@ export type ProductType = {
   stock: number;
   images: string;
   category: KategoriType;
+  slug?: string;
   status?: "Pending" | "Approved" | "Rejected";
 };
 
@@ -17,4 +18,8 @@ export type ProductProps = {
   totalCount: number;
   currentPage: number;
   totalPages: number;
+};
+
+type EditProductProps = {
+  product: ProductType;
 };

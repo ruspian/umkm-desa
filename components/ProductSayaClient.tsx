@@ -176,12 +176,13 @@ export default function ProductSayaClient({
               >
                 <ExternalLink size={20} />
               </button>
-              <button
+              <Link
+                href={`/penjual/produk-saya/edit/${product.slug}`}
                 title="Edit Produk"
                 className="p-3 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all"
               >
                 <Edit3 size={20} />
-              </button>
+              </Link>
               <button
                 title="Hapus Produk"
                 className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"

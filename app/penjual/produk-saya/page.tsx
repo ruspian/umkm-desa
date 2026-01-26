@@ -61,6 +61,7 @@ export default async function MyProductsPage({
     discount: product.discount,
     category: product.category,
     description: product.description,
+    slug: product.slug,
   }));
 
   const totalPages = Math.ceil(totalCount / limit);
