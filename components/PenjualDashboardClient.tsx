@@ -63,7 +63,7 @@ const PenjualDashboardClient = ({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Chart Placeholder (Produk Terpopuler) */}
+        {/* Chart Placeholder*/}
         <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-black flex items-center gap-2">
@@ -71,7 +71,7 @@ const PenjualDashboardClient = ({
               Stok Hampir Habis
             </h3>
             <Link
-              href="/penjual/produk-saya"
+              href="/toko/produk-saya"
               className="text-xs font-bold text-orange-600 hover:underline"
             >
               Lihat Semua

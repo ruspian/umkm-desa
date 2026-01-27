@@ -12,6 +12,13 @@ const EditProductPage = async ({
 
   const product = await prisma.product.findUnique({
     where: { slug: slug },
+    include: {
+      toko: {
+        select: {
+          isVerified: true,
+        },
+      },
+    },
   });
 
   if (!product) {
@@ -30,7 +37,12 @@ const EditProductPage = async ({
     description: product.description,
     slug: product.slug,
   };
-  return <EditProductClient product={formatedProduct} />;
+  return (
+    <EditProductClient
+      product={formatedProduct}
+      verified={!!product.toko?.isVerified}
+    />
+  );
 };
 
 export default EditProductPage;

@@ -41,7 +41,7 @@ export default async function MyProductsPage({
       : {}),
   };
   // Transaction untuk ambil Data sekaligus Total Count (buat pagination di UI)
-  const [products, totalCount] = await prisma.$transaction([
+  const [products, totalCount, verified] = await prisma.$transaction([
     prisma.product.findMany({
       where: whereCondition,
       skip: (page - 1) * limit,
@@ -49,6 +49,11 @@ export default async function MyProductsPage({
       orderBy: { createdAt: "desc" },
     }),
     prisma.product.count({ where: whereCondition }),
+
+    prisma.toko.findFirst({
+      where: { id: tokoId },
+      select: { isVerified: true },
+    }),
   ]);
 
   const formatedProducts = products.map((product) => ({
@@ -73,6 +78,7 @@ export default async function MyProductsPage({
       totalCount={totalCount}
       currentPage={page}
       totalPages={totalPages}
+      verified={verified?.isVerified}
     />
   );
 }

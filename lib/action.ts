@@ -18,6 +18,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// fungsi cek verifikasi toko
+const checkTokoVerified = async (userId: string) => {
+  const toko = await prisma.toko.findUnique({
+    where: { userId },
+    select: { isVerified: true, id: true },
+  });
+  return toko?.isVerified ? toko.id : null;
+};
+
 // fungsi register akun
 export const RegisterAction = async (data: Register) => {
   const { username, email, password } = data;
@@ -158,15 +167,7 @@ export const DeleteImage = async (data: CloudinaryDelete) => {
 // fungsi tambah produk
 export const AddProduct = async (data: ProductType) => {
   const session = await auth();
-  const tokoId = session?.user.tokoId;
   const userId = session?.user.id;
-
-  if (!tokoId) {
-    return {
-      message: "Toko tidak ditemukan!",
-      success: false,
-    };
-  }
 
   if (!session?.user || session?.user.role !== "PENJUAL") {
     return {
@@ -179,22 +180,17 @@ export const AddProduct = async (data: ProductType) => {
     const { nama, description, images, stock, discount, price, category } =
       data;
 
-    const toko = await prisma.toko.findUnique({
-      where: { userId: userId },
-      select: {
-        isVerified: true,
-      },
-    });
+    const tokoId = await checkTokoVerified(userId as string);
 
     //  jika belum terverifikasi, tidak dapat menambahkan produk
-    if (!toko || !toko.isVerified) {
+    if (!tokoId) {
       // hapus gambar yang sudah diupload
       if (images) {
         await DeleteImage({ url: images, resourceType: "image" });
       }
 
       return {
-        message: "Toko belum terverifikasi, tidak dapat menambahkan produk!",
+        message: "Toko belum terverifikasi, Hubungi Admin!",
         success: false,
       };
     }
@@ -254,6 +250,7 @@ export const AddProduct = async (data: ProductType) => {
 // fungsi edit produk
 export const EditProduct = async (data: ProductType) => {
   const session = await auth();
+  const userId = session?.user.id;
 
   if (!session?.user || session?.user.role !== "PENJUAL") {
     return {
@@ -273,6 +270,16 @@ export const EditProduct = async (data: ProductType) => {
       category,
       slug,
     } = data;
+
+    // Cek status verifikasi toko
+    const tokoId = await checkTokoVerified(userId as string);
+
+    if (!tokoId) {
+      return {
+        message: "Toko belum terverifikasi, Hubungi Admin!",
+        success: false,
+      };
+    }
 
     if (!nama || !images || !price || !stock) {
       return {
@@ -334,6 +341,67 @@ export const EditProduct = async (data: ProductType) => {
     };
   } catch (error) {
     console.log("gagal edit product:", error);
+
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi hapus produk
+export const DeleteProduct = async (id: string) => {
+  const session = await auth();
+
+  if (!session?.user || session?.user.role !== "PENJUAL") {
+    return {
+      message: "Akses ditolak, Silahkan Login!",
+      success: false,
+    };
+  }
+
+  try {
+    const tokoId = await checkTokoVerified(session.user.id);
+
+    if (!tokoId) {
+      return {
+        message: "Toko belum terverifikasi, Hubungi Admin!",
+        success: false,
+      };
+    }
+
+    const product = await prisma.product.findUnique({
+      where: { id },
+      select: { images: true, toko: { select: { userId: true } } },
+    });
+
+    // pastikan produk itu milik user yang sedang login
+    if (product?.toko.userId !== session.user.id) {
+      return {
+        message: "Akses ditolak, Produk bukan milik Anda!",
+        success: false,
+      };
+    }
+
+    // hapus gambar dari cloudinary
+    if (product && product.images) {
+      await DeleteImage({ url: product.images, resourceType: "image" });
+    }
+
+    // hapus produk dari database
+    await prisma.product.delete({
+      where: { id },
+    });
+
+    revalidatePath("/toko/produk-saya");
+    revalidatePath("/");
+
+    return {
+      message: "Produk berhasil dihapus!",
+      success: true,
+    };
+  } catch (error) {
+    console.log("gagal menghapus product:", error);
 
     return {
       message: "Kesalahan pada server!",

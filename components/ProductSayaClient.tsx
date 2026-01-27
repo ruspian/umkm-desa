@@ -7,7 +7,6 @@ import {
   Clock,
   AlertCircle,
   Edit3,
-  Trash2,
   ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
@@ -17,14 +16,17 @@ import Pagination from "./Pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
+import ModalDelete from "./ModalDelete";
 
 export default function ProductSayaClient({
   products,
   currentPage,
   totalCount,
   totalPages,
+  verified,
 }: ProductProps) {
   const [search, setSearch] = useState("");
+
   const [debouncedSearch] = useDebounce(search, 500);
 
   const searchParams = useSearchParams();
@@ -83,7 +85,10 @@ export default function ProductSayaClient({
           </p>
         </div>
         <Link href="/toko/produk-saya/tambah">
-          <button className="flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-[1.5rem] font-black shadow-xl hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all active:scale-95">
+          <button
+            disabled={verified}
+            className="flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-[1.5rem] font-black shadow-xl hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <Plus size={20} />
             Tambah Produk
           </button>
@@ -177,18 +182,13 @@ export default function ProductSayaClient({
                 <ExternalLink size={20} />
               </button>
               <Link
-                href={`/penjual/produk-saya/edit/${product.slug}`}
+                href={`/toko/produk-saya/edit/${product.slug}`}
                 title="Edit Produk"
-                className="p-3 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all"
+                className={`p-3 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all`}
               >
                 <Edit3 size={20} />
               </Link>
-              <button
-                title="Hapus Produk"
-                className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
-              >
-                <Trash2 size={20} />
-              </button>
+              <ModalDelete productId={product.id} productName={product.nama} />
             </div>
           </div>
         ))}

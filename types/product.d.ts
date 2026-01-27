@@ -18,8 +18,15 @@ export type ProductProps = {
   totalCount: number;
   currentPage: number;
   totalPages: number;
+  verified?: boolean | undefined;
 };
 
 type EditProductProps = {
   product: ProductType;
+  verified?: boolean | undefined;
 };
+
+export interface ModalDeleteProps {
+  productId: string;
+  productName: string;
+}

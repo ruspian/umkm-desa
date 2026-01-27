@@ -21,7 +21,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function EditProductClient({ product }: EditProductProps) {
+export default function EditProductClient({
+  product,
+  verified,
+}: EditProductProps) {
   const [formData, setFormData] = useState<ProductType>({
     id: product.id || "",
     nama: product.nama || "",
@@ -146,7 +149,10 @@ export default function EditProductClient({ product }: EditProductProps) {
         </p>
       </header>
 
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        className={!verified ? "opacity-60 grayscale-[0.5]" : ""}
+      >
         <div className="bg-white dark:bg-gray-900 rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
           {/*  Foto */}
           <div className="space-y-4">
@@ -171,6 +177,7 @@ export default function EditProductClient({ product }: EditProductProps) {
                     type="button"
                     onClick={handleDeleteImage}
                     className="bg-red-500 text-white px-6 py-2 rounded-2xl font-black text-sm hover:bg-red-600 transition-all"
+                    disabled={isSubmitting || !verified}
                   >
                     Hapus
                   </button>
@@ -193,6 +200,7 @@ export default function EditProductClient({ product }: EditProductProps) {
                   className="hidden"
                   accept="image/*"
                   onChange={handleUploadImage}
+                  disabled={isSubmitting || !verified}
                 />
               </label>
             )}
@@ -214,7 +222,8 @@ export default function EditProductClient({ product }: EditProductProps) {
                   name="nama"
                   value={formData?.nama}
                   onChange={(e) => handleChangeInput("nama", e.target.value)}
-                  placeholder="Contoh: Keripik Singkong Pedas"
+                  placeholder="Keripik Singkong Pedas"
+                  disabled={isSubmitting || !verified}
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
                 />
               </div>
@@ -235,6 +244,7 @@ export default function EditProductClient({ product }: EditProductProps) {
                   placeholder="15000"
                   name="price"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+                  disabled={isSubmitting || !verified}
                 />
               </div>
             </div>
@@ -255,6 +265,7 @@ export default function EditProductClient({ product }: EditProductProps) {
                   placeholder="10"
                   name="stock"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+                  disabled={isSubmitting || !verified}
                 />
               </div>
             </div>
@@ -277,6 +288,7 @@ export default function EditProductClient({ product }: EditProductProps) {
                   name="discount"
                   placeholder="10"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+                  disabled={isSubmitting || !verified}
                 />
               </div>
             </div>
@@ -297,6 +309,7 @@ export default function EditProductClient({ product }: EditProductProps) {
                   }
                   name="category"
                   className="w-full pl-14 pr-10 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-black outline-none focus:ring-2 ring-orange-500/20 appearance-none cursor-pointer transition-all hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={isSubmitting || !verified}
                 >
                   {KategoriIcon.map((item) => (
                     <option
@@ -329,6 +342,7 @@ export default function EditProductClient({ product }: EditProductProps) {
                 rows={5}
                 placeholder="Jelaskan bahan baku, berat, atau keunikan produk kamu..."
                 className="w-full px-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-3xl font-bold outline-none focus:ring-2 ring-orange-500/20 resize-none"
+                disabled={isSubmitting || !verified}
               />
             </div>
           </div>
@@ -336,9 +350,9 @@ export default function EditProductClient({ product }: EditProductProps) {
           <button
             type="submit"
             className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-orange-200 dark:shadow-none hover:bg-orange-700 transition-all active:scale-95 disabled:bg-orange-600/50 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !verified}
           >
-            {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
+            {!verified ? "Toko Belum Terverifikasi" : "Simpan Perubahan"}
           </button>
         </div>
       </form>
