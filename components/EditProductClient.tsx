@@ -123,7 +123,7 @@ export default function EditProductClient({ product }: EditProductProps) {
           throw new Error(result.message || "Terjadi kesalahan!");
         }
 
-        router.push("/penjual/produk-saya");
+        router.push("/toko/produk-saya");
         setIsSubmitting(false);
         return result;
       },

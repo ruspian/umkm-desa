@@ -40,7 +40,7 @@ export default async function PenjualDashboard() {
   });
 
   if (!userToko) {
-    redirect("/penjual/profile"); // Arahkan jika belum punya profil toko
+    redirect("/toko/profile"); // Arahkan jika belum punya profil toko
   }
 
   const tokoId = userToko.id;
@@ -86,7 +86,7 @@ export default async function PenjualDashboard() {
     },
     {
       label: "Produk Diskon",
-      value: discountProducts === 0 ? "-" : discountProducts.toString(),
+      value: discountProducts.toString(),
       icon: <Percent className="text-orange-600" />,
       change: `${discountProducts} Produk Berpromo`,
       color: "bg-orange-50",

@@ -82,7 +82,7 @@ export default function ProductSayaClient({
             Kelola stok dan pantau status verifikasi produk kamu.
           </p>
         </div>
-        <Link href="/penjual/produk-saya/tambah">
+        <Link href="/toko/produk-saya/tambah">
           <button className="flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-[1.5rem] font-black shadow-xl hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all active:scale-95">
             <Plus size={20} />
             Tambah Produk

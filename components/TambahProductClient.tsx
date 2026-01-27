@@ -21,7 +21,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function TambahPoductClient() {
+type TambahProductClientProps = {
+  isVerified: boolean | undefined;
+};
+
+export default function TambahPoductClient({
+  isVerified,
+}: TambahProductClientProps) {
   const [formData, setFormData] = useState<ProductType>({
     id: "",
     nama: "",
@@ -115,10 +121,11 @@ export default function TambahPoductClient() {
         const result = await AddProduct(formData);
 
         if (!result.success) {
+          setIsSubmitting(false);
           throw new Error(result.message || "Terjadi kesalahan!");
         }
 
-        router.push("/penjual/produk-saya");
+        router.push("/toko/produk-saya");
         setIsSubmitting(false);
         return result;
       },
@@ -132,6 +139,21 @@ export default function TambahPoductClient() {
 
   return (
     <div className="p-8 md:p-12 max-w-4xl mx-auto space-y-10">
+      {!isVerified && (
+        <div className="bg-amber-50 border-2 border-amber-200 p-6 rounded-[2rem] flex items-center gap-4 animate-pulse">
+          <div className="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-700">
+            <Hash size={24} />
+          </div>
+          <div>
+            <p className="text-amber-900 font-black">Tahap Verifikasi</p>
+            <p className="text-amber-700 text-sm font-medium">
+              Toko kamu sedang dicek oleh admin AsliSini. Tombol tambah produk
+              akan aktif otomatis setelah diverifikasi.
+            </p>
+          </div>
+        </div>
+      )}
+
       <header>
         <h1 className="text-4xl font-black tracking-tight text-gray-900">
           Upload <span className="text-orange-600">Produk Baru</span>
@@ -141,7 +163,10 @@ export default function TambahPoductClient() {
         </p>
       </header>
 
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        className={!isVerified ? "opacity-60 grayscale-[0.5]" : ""}
+      >
         <div className="bg-white dark:bg-gray-900 rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
           {/*  Foto */}
           <div className="space-y-4">
@@ -188,6 +213,7 @@ export default function TambahPoductClient() {
                   className="hidden"
                   accept="image/*"
                   onChange={handleUploadImage}
+                  disabled={!isVerified}
                 />
               </label>
             )}
@@ -211,6 +237,7 @@ export default function TambahPoductClient() {
                   onChange={(e) => handleChangeInput("nama", e.target.value)}
                   placeholder="Contoh: Keripik Singkong Pedas"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+                  disabled={!isVerified}
                 />
               </div>
             </div>
@@ -230,6 +257,7 @@ export default function TambahPoductClient() {
                   placeholder="15000"
                   name="price"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+                  disabled={!isVerified}
                 />
               </div>
             </div>
@@ -250,6 +278,7 @@ export default function TambahPoductClient() {
                   placeholder="10"
                   name="stock"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+                  disabled={!isVerified}
                 />
               </div>
             </div>
@@ -272,6 +301,7 @@ export default function TambahPoductClient() {
                   name="discount"
                   placeholder="10"
                   className="w-full pl-14 pr-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+                  disabled={!isVerified}
                 />
               </div>
             </div>
@@ -292,6 +322,7 @@ export default function TambahPoductClient() {
                   }
                   name="category"
                   className="w-full pl-14 pr-10 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-black outline-none focus:ring-2 ring-orange-500/20 appearance-none cursor-pointer transition-all hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={!isVerified}
                 >
                   {KategoriIcon.map((item) => (
                     <option
@@ -324,6 +355,7 @@ export default function TambahPoductClient() {
                 rows={5}
                 placeholder="Jelaskan bahan baku, berat, atau keunikan produk kamu..."
                 className="w-full px-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-3xl font-bold outline-none focus:ring-2 ring-orange-500/20 resize-none"
+                disabled={!isVerified}
               />
             </div>
           </div>
@@ -331,9 +363,11 @@ export default function TambahPoductClient() {
           <button
             type="submit"
             className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-orange-200 dark:shadow-none hover:bg-orange-700 transition-all active:scale-95 disabled:bg-orange-600/50 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
+            disabled={!isVerified || isSubmitting}
           >
-            Daftarkan Produk Sekarang
+            {!isVerified
+              ? "Akun Menunggu Verifikasi Admin"
+              : "Daftarkan Produk Sekarang"}
           </button>
         </div>
       </form>

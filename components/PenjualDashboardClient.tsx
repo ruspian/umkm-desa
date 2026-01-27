@@ -122,7 +122,7 @@ const PenjualDashboardClient = ({
                       </td>
                       <td className="py-4 text-right pr-4 rounded-r-2xl border-y border-r border-gray-100 dark:border-gray-800">
                         <Link
-                          href={`/penjual/edit-produk/${product.slug}`}
+                          href={`/toko/produk-saya/edit/${product.slug}`}
                           className="inline-flex items-center justify-center w-8 h-8 bg-white dark:bg-gray-700 rounded-lg text-gray-400 hover:text-orange-600 shadow-sm border border-gray-100 transition-all"
                         >
                           <ArrowUpRight size={16} />

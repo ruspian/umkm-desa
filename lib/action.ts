@@ -159,6 +159,7 @@ export const DeleteImage = async (data: CloudinaryDelete) => {
 export const AddProduct = async (data: ProductType) => {
   const session = await auth();
   const tokoId = session?.user.tokoId;
+  const userId = session?.user.id;
 
   if (!tokoId) {
     return {
@@ -178,6 +179,26 @@ export const AddProduct = async (data: ProductType) => {
     const { nama, description, images, stock, discount, price, category } =
       data;
 
+    const toko = await prisma.toko.findUnique({
+      where: { userId: userId },
+      select: {
+        isVerified: true,
+      },
+    });
+
+    //  jika belum terverifikasi, tidak dapat menambahkan produk
+    if (!toko || !toko.isVerified) {
+      // hapus gambar yang sudah diupload
+      if (images) {
+        await DeleteImage({ url: images, resourceType: "image" });
+      }
+
+      return {
+        message: "Toko belum terverifikasi, tidak dapat menambahkan produk!",
+        success: false,
+      };
+    }
+
     if (!nama || !images || !price || !stock) {
       return {
         message: "Data belum lengkap!",
@@ -191,6 +212,8 @@ export const AddProduct = async (data: ProductType) => {
         success: false,
       };
     }
+
+    // cek apakah toko sudah terverifikasi
 
     const generateSlug = slugify(nama, { lower: true });
     const slug = generateSlug + "-" + Math.floor(Math.random() * 1000);
@@ -210,7 +233,7 @@ export const AddProduct = async (data: ProductType) => {
       },
     });
 
-    revalidatePath("/penjual/produk-saya");
+    revalidatePath("/toko/produk-saya");
     revalidatePath("/admin/products");
     revalidatePath("/");
 
@@ -265,12 +288,34 @@ export const EditProduct = async (data: ProductType) => {
       };
     }
 
+    const oldProduct = await prisma.product.findUnique({
+      where: { slug: slug },
+      select: { images: true },
+    });
+
+    if (!oldProduct)
+      return { message: "Produk tidak ditemukan!", success: false };
+
+    // Jika ada foto baru dikirim DAN foto baru itu beda dengan foto lama
+    if (images && images !== oldProduct.images) {
+      try {
+        // Hapus foto yang LAMA dari Cloudinary
+        await DeleteImage({ url: oldProduct.images, resourceType: "image" });
+      } catch (cloudinaryErr) {
+        console.log(
+          "Gagal hapus foto lama, lanjut update data...",
+          cloudinaryErr,
+        );
+        //  biarkan lanjut agar data teks tetap terupdate meskipun hapus foto gagal
+      }
+    }
+
     const updatedProduct = await prisma.product.update({
       where: { slug: slug as string },
       data: {
         name: nama,
         description,
-        images,
+        images: images,
         stock: Number(stock),
         discount: Number(discount),
         price: Number(price),
@@ -278,7 +323,7 @@ export const EditProduct = async (data: ProductType) => {
       },
     });
 
-    revalidatePath("/penjual/produk-saya");
+    revalidatePath("/toko/produk-saya");
     revalidatePath("/admin/products");
     revalidatePath("/");
 
@@ -318,6 +363,34 @@ export const CreateToko = async (data: TokoType) => {
       };
     }
 
+    const oldToko = await prisma.toko.findUnique({
+      where: { userId: session.user.id },
+    });
+
+    if (!oldToko) {
+      return {
+        message: "Toko tidak ditemukan!",
+        success: false,
+      };
+    }
+
+    // Jika ada foto baru dikirim DAN foto baru itu beda dengan foto lama
+    if (logo && logo !== oldToko.logo) {
+      try {
+        // Hapus foto yang LAMA dari Cloudinary
+        await DeleteImage({
+          url: oldToko.logo as string,
+          resourceType: "image",
+        });
+      } catch (cloudinaryErr) {
+        console.log(
+          "Gagal hapus foto lama, lanjut update data...",
+          cloudinaryErr,
+        );
+        //  biarkan lanjut agar data teks tetap terupdate meskipun hapus foto gagal
+      }
+    }
+
     const generateSlug = slugify(namaToko, { lower: true });
     const slug = generateSlug + "-" + Math.floor(Math.random() * 1000);
 
@@ -326,7 +399,7 @@ export const CreateToko = async (data: TokoType) => {
       update: {
         namaToko,
         deskripsi,
-        logo,
+        logo: logo,
         alamat,
         noWhatsapp,
       },
@@ -341,7 +414,7 @@ export const CreateToko = async (data: TokoType) => {
       },
     });
 
-    revalidatePath("/penjual/profile");
+    revalidatePath("/toko/profile");
     revalidatePath(`/seller/${toko.slug}`);
 
     return {
