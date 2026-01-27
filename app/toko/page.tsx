@@ -51,7 +51,7 @@ export default async function PenjualDashboard() {
       prisma.product.findMany({
         where: {
           tokoId,
-          stock: { lt: 10 }, // Ambil yang stoknya di bawah 10
+          stock: { lt: 5 }, // Ambil yang stoknya di bawah 5
         },
         orderBy: { stock: "asc" }, // Urutkan dari yang paling mau habis
         take: 5, // Ambil 5 saja biar gak kepanjangan

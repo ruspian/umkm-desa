@@ -260,16 +260,8 @@ export const EditProduct = async (data: ProductType) => {
   }
 
   try {
-    const {
-      nama,
-      description,
-      images,
-      stock,
-      discount,
-      price,
-      category,
-      slug,
-    } = data;
+    const { id, nama, description, images, stock, discount, price, category } =
+      data;
 
     // Cek status verifikasi toko
     const tokoId = await checkTokoVerified(userId as string);
@@ -277,6 +269,26 @@ export const EditProduct = async (data: ProductType) => {
     if (!tokoId) {
       return {
         message: "Toko belum terverifikasi, Hubungi Admin!",
+        success: false,
+      };
+    }
+
+    const product = await prisma.product.findUnique({
+      where: { id: id },
+      select: { images: true, toko: { select: { userId: true } } },
+    });
+
+    if (!product) {
+      return {
+        message: "Produk tidak ditemukan!",
+        success: false,
+      };
+    }
+
+    // pastikan produk milik user yang sedang login
+    if (product?.toko.userId !== session.user.id) {
+      return {
+        message: "Akses ditolak, Produk bukan milik Anda!",
         success: false,
       };
     }
@@ -295,19 +307,11 @@ export const EditProduct = async (data: ProductType) => {
       };
     }
 
-    const oldProduct = await prisma.product.findUnique({
-      where: { slug: slug },
-      select: { images: true },
-    });
-
-    if (!oldProduct)
-      return { message: "Produk tidak ditemukan!", success: false };
-
     // Jika ada foto baru dikirim DAN foto baru itu beda dengan foto lama
-    if (images && images !== oldProduct.images) {
+    if (images && images !== product.images) {
       try {
         // Hapus foto yang LAMA dari Cloudinary
-        await DeleteImage({ url: oldProduct.images, resourceType: "image" });
+        await DeleteImage({ url: product.images, resourceType: "image" });
       } catch (cloudinaryErr) {
         console.log(
           "Gagal hapus foto lama, lanjut update data...",
@@ -318,7 +322,7 @@ export const EditProduct = async (data: ProductType) => {
     }
 
     const updatedProduct = await prisma.product.update({
-      where: { slug: slug as string },
+      where: { id: id as string },
       data: {
         name: nama,
         description,
