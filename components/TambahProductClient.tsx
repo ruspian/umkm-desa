@@ -140,13 +140,13 @@ export default function TambahPoductClient({
   return (
     <div className="p-8 md:p-12 max-w-4xl mx-auto space-y-10">
       {!isVerified && (
-        <div className="bg-amber-50 border-2 border-amber-200 p-6 rounded-[2rem] flex items-center gap-4 animate-pulse">
-          <div className="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-700">
+        <div className="bg-red-500  p-6 rounded-[2rem] flex items-center gap-4 animate-pulse">
+          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-red-700">
             <Hash size={24} />
           </div>
           <div>
-            <p className="text-amber-900 font-black">Tahap Verifikasi</p>
-            <p className="text-amber-700 text-sm font-medium">
+            <p className="text-white font-black">Tahap Verifikasi</p>
+            <p className="text-gray-300 text-sm font-medium">
               Toko kamu sedang dicek oleh admin AsliSini. Tombol tambah produk
               akan aktif otomatis setelah diverifikasi.
             </p>
@@ -155,7 +155,7 @@ export default function TambahPoductClient({
       )}
 
       <header>
-        <h1 className="text-4xl font-black tracking-tight text-gray-900">
+        <h1 className="text-4xl font-black tracking-tight text-background dark:text-foreground">
           Upload <span className="text-orange-600">Produk Baru</span>
         </h1>
         <p className="text-gray-500 font-medium mt-1">
@@ -167,7 +167,7 @@ export default function TambahPoductClient({
         onSubmit={handleSubmit}
         className={!isVerified ? "opacity-60 grayscale-[0.5]" : ""}
       >
-        <div className="bg-white dark:bg-gray-900 rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
+        <div className="bg-foreground dark:bg-background rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
           {/*  Foto */}
           <div className="space-y-4">
             <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">
@@ -198,7 +198,7 @@ export default function TambahPoductClient({
               </div>
             ) : (
               /* Tampilan Dropzone jika belum ada gambar */
-              <label className="border-4 border-dashed border-gray-100 dark:border-gray-800 rounded-[2.5rem] p-12 flex flex-col items-center justify-center group hover:border-orange-200 transition-colors cursor-pointer bg-gray-50/50 dark:bg-gray-800/30">
+              <label className="border-4 border-dashed border-gray-100 dark:border-gray-800 rounded-[2.5rem] p-12 flex flex-col items-center justify-center group hover:border-orange-200 transition-colors cursor-pointer bg-foreground dark:bg-background">
                 <div className="w-16 h-16 bg-white dark:bg-gray-700 rounded-2xl flex items-center justify-center text-orange-600 shadow-xl group-hover:scale-110 transition-transform mb-4">
                   <ImagePlus size={32} />
                 </div>
@@ -362,7 +362,7 @@ export default function TambahPoductClient({
 
           <button
             type="submit"
-            className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-orange-200 dark:shadow-none hover:bg-orange-700 transition-all active:scale-95 disabled:bg-orange-600/50 disabled:cursor-not-allowed"
+            className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg shadow-2xl  hover:bg-orange-700 transition-all active:scale-95 disabled:bg-orange-600/50 disabled:cursor-not-allowed"
             disabled={!isVerified || isSubmitting}
           >
             {!isVerified

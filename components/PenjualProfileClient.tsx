@@ -127,7 +127,7 @@ export default function PenjualProfileClient({
       {/* HEADER & ACTIONS */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
+          <h1 className="text-4xl font-black tracking-tight text-background dark:text-foreground">
             Profil <span className="text-orange-600">Toko UMKM</span>
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -137,7 +137,7 @@ export default function PenjualProfileClient({
 
         <button
           onClick={onSaveProfile}
-          className="flex items-center justify-center gap-2 px-8 py-4 bg-orange-600 text-white rounded-[1.5rem] font-black text-sm hover:bg-orange-700 transition-all shadow-xl shadow-orange-200 active:scale-95 cursor-pointer"
+          className="flex items-center justify-center gap-2 px-8 py-4 bg-orange-600 text-white rounded-[1.5rem] font-black text-sm hover:bg-orange-700 transition-all shadow-sm shadow-orange-200 active:scale-95 cursor-pointer"
         >
           <Save size={18} /> Simpan Profil
         </button>
@@ -146,14 +146,17 @@ export default function PenjualProfileClient({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Branding & Identitas */}
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
+          <div className="bg-foreground dark:bg-background rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
-              <Store className="text-orange-600" size={24} /> Informasi Dasar
+              <Store className="text-orange-600" size={24} />{" "}
+              <span className="text-background dark:text-foreground">
+                Informasi Toko
+              </span>
             </h3>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
+                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
                   Nama Toko / UMKM
                 </label>
                 <input
@@ -169,7 +172,7 @@ export default function PenjualProfileClient({
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
+                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
                   Deskripsi Singkat Toko
                 </label>
                 <textarea
@@ -187,14 +190,17 @@ export default function PenjualProfileClient({
           </div>
 
           {/* Kontak & Lokasi */}
-          <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
+          <div className="bg-foreground dark:bg-background rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
-              <MapPin className="text-orange-600" size={24} /> Kontak & Lokasi
+              <MapPin className="text-orange-600" size={24} />{" "}
+              <span className="text-background dark:text-foreground">
+                Kontak & Lokasi
+              </span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2 md:col-span-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
+                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
                   No. WhatsApp
                 </label>
                 <div className="relative">
@@ -216,7 +222,7 @@ export default function PenjualProfileClient({
               </div>
 
               <div className="md:col-span-2 space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
+                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
                   Alamat Lengkap
                 </label>
                 <input
@@ -234,7 +240,7 @@ export default function PenjualProfileClient({
         {/* logo dan verifikasi toko */}
         <div className="space-y-8">
           {/* Logo Toko */}
-          <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col items-center text-center">
+          <div className="bg-foreground dark:bg-background rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col items-center text-center">
             {formData.logo ? (
               <div className="relative w-40 h-40 rounded-[2.5rem] overflow-hidden group border-4 border-gray-50 dark:border-gray-800 shadow-xl">
                 <Image
@@ -273,7 +279,9 @@ export default function PenjualProfileClient({
                 />
               </div>
             )}
-            <h4 className="mt-8 font-black text-xl">Logo UMKM</h4>
+            <h4 className="mt-8 font-black text-xl text-background dark:text-foreground">
+              Logo UMKM
+            </h4>
             <p className="text-sm text-gray-400 font-medium mt-1 px-4">
               Disarankan ukuran 1:1 (Persegi) dengan kualitas tinggi.
             </p>
@@ -305,26 +313,6 @@ export default function PenjualProfileClient({
               </p>
             </div>
           )}
-
-          {/* Statistik Toko Singkat */}
-          <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-400 font-bold text-sm uppercase tracking-widest">
-                Dilihat
-              </span>
-              <span className="font-black text-gray-900 dark:text-white">
-                1,240 x
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-400 font-bold text-sm uppercase tracking-widest">
-                Produk
-              </span>
-              <span className="font-black text-gray-900 dark:text-white">
-                12 Item
-              </span>
-            </div>
-          </div>
         </div>
       </div>
     </div>

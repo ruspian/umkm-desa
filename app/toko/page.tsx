@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import PenjualDashboardClient from "@/components/PenjualDashboardClient";
 import { Package, Percent, AlertTriangle } from "lucide-react";
+import { formatDateDisplay } from "@/lib/formatDate";
 
 const TIPS_JUALAN = [
   "Produk dengan foto berlatar terang terbukti mendapatkan klik 2x lebih banyak.",
@@ -28,10 +29,7 @@ export default async function PenjualDashboard() {
   const randomTip = TIPS_JUALAN[tipIndex];
 
   // Ambil waktu sekarang dalam format WITA
-  const lastUpdate = new Intl.DateTimeFormat("id-ID", {
-    dateStyle: "medium",
-    timeZone: "Asia/Makassar", // WITA
-  }).format(new Date());
+  const lastUpdate = formatDateDisplay(new Date().toISOString());
 
   //  Ambil tokoId
   const userToko = await prisma.toko.findUnique({

@@ -141,7 +141,7 @@ export default function EditProductClient({
   return (
     <div className="p-8 md:p-12 max-w-4xl mx-auto space-y-10">
       <header>
-        <h1 className="text-4xl font-black tracking-tight text-gray-900">
+        <h1 className="text-4xl font-black tracking-tight text-background dark:text-foreground">
           Edit <span className="text-orange-600">Produk Saya</span>
         </h1>
         <p className="text-gray-500 font-medium mt-1">
@@ -153,7 +153,7 @@ export default function EditProductClient({
         onSubmit={handleSubmit}
         className={!verified ? "opacity-60 grayscale-[0.5]" : ""}
       >
-        <div className="bg-white dark:bg-gray-900 rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
+        <div className="bg-foreground dark:bg-background rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
           {/*  Foto */}
           <div className="space-y-4">
             <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">
@@ -349,7 +349,7 @@ export default function EditProductClient({
 
           <button
             type="submit"
-            className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-orange-200 dark:shadow-none hover:bg-orange-700 transition-all active:scale-95 disabled:bg-orange-600/50 disabled:cursor-not-allowed"
+            className="w-full py-5 bg-orange-600 text-white rounded-[2rem] font-black text-lg  dark:shadow-none hover:bg-orange-700 transition-all active:scale-95 disabled:bg-orange-600/50 disabled:cursor-not-allowed"
             disabled={isSubmitting || !verified}
           >
             {!verified ? "Toko Belum Terverifikasi" : "Simpan Perubahan"}

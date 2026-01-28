@@ -14,18 +14,18 @@ const PenjualDashboardClient = ({
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
+          <h1 className="text-4xl font-black tracking-tight text-background dark:text-foreground">
             Statistik <span className="text-orange-600">Dagangan</span>
           </h1>
           <p className="text-gray-500 font-medium mt-1">
             Pantau performa produk UMKM kamu secara real-time.
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-900 px-6 py-3 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+        <div className="bg-foreground dark:bg-background px-6 py-3 rounded-2xl border border-orange-500 dark:border-gray-800 shadow-sm">
+          <p className="text-[10px] font-black text-orange-500 dark:text-gray-400 uppercase tracking-widest">
             Update Terakhir
           </p>
-          <p className="text-sm font-bold text-gray-900 dark:text-white">
+          <p className="text-sm font-bold text-background dark:text-foreground">
             {lastUpdate}
           </p>
         </div>
@@ -36,21 +36,21 @@ const PenjualDashboardClient = ({
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="group bg-white dark:bg-gray-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 hover:border-orange-200 transition-all duration-300 shadow-sm relative overflow-hidden"
+            className="group bg-foreground dark:bg-background p-8 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 hover:border-orange-500 transition-all duration-300 shadow-sm relative overflow-hidden"
           >
             <div
               className={`absolute top-0 right-0 w-24 h-24 ${stat.color} opacity-30 rounded-bl-full -mr-8 -mt-8`}
             />
 
             <div className="relative">
-              <div className="w-12 h-12 rounded-2xl bg-white dark:bg-gray-800 shadow-inner flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-foreground dark:bg-background border hover:border-orange-500 shadow-inner flex items-center justify-center mb-6 ">
                 {stat.icon}
               </div>
               <p className="text-gray-400 font-black text-xs uppercase tracking-widest">
                 {stat.label}
               </p>
               <div className="flex items-end justify-between mt-2">
-                <h2 className="text-4xl font-black text-gray-900 dark:text-white">
+                <h2 className="text-4xl font-black text-background dark:text-foreground">
                   {stat.value}
                 </h2>
                 <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
@@ -64,11 +64,11 @@ const PenjualDashboardClient = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Chart Placeholder*/}
-        <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
+        <div className="lg:col-span-2 bg-foreground dark:bg-background rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-black flex items-center gap-2">
-              <AlertTriangle className="text-red-600" size={24} />
-              Stok Hampir Habis
+              <AlertTriangle className="text-red-500" size={24} />
+              <span className="text-red-500">Stok Hampir Habis</span>
             </h3>
             <Link
               href="/toko/produk-saya"
@@ -81,7 +81,7 @@ const PenjualDashboardClient = ({
           <div className="overflow-x-auto">
             <table className="w-full text-left border-separate border-spacing-y-3">
               <thead>
-                <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4">
+                <tr className="text-[10px] font-black text-background dark:text-foreground uppercase tracking-widest px-4">
                   <th className="pb-2 pl-4">Produk</th>
                   <th className="pb-2 text-center">Sisa Stok</th>
                   <th className="pb-2 text-right pr-4">Aksi</th>

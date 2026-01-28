@@ -7,7 +7,7 @@ const Pagination = ({
   handlePageChange,
 }: PaginationProps) => {
   return (
-    <div className="py-4 px-12 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+    <div className="py-4 px-12 border-t border-slate-100 flex items-center justify-between bg-foreground dark:bg-background ">
       <p className="text-xs text-slate-500">Total: {totalCount} produk</p>
       <div className="flex gap-2">
         <button
