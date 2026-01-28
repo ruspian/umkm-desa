@@ -155,7 +155,7 @@ export default function TambahPoductClient({
       )}
 
       <header>
-        <h1 className="text-4xl font-black tracking-tight text-background dark:text-foreground">
+        <h1 className="text-4xl font-black tracking-tight">
           Upload <span className="text-orange-600">Produk Baru</span>
         </h1>
         <p className="text-gray-500 font-medium mt-1">
@@ -167,7 +167,7 @@ export default function TambahPoductClient({
         onSubmit={handleSubmit}
         className={!isVerified ? "opacity-60 grayscale-[0.5]" : ""}
       >
-        <div className="bg-foreground dark:bg-background rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
+        <div className="rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
           {/*  Foto */}
           <div className="space-y-4">
             <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">

@@ -30,7 +30,7 @@ export default function PenjualLayout({
   ];
 
   return (
-    <div className="flex min-h-screen bg-foreground dark:bg-background">
+    <div className="flex min-h-screen">
       {/* Sidebar Penjual */}
       <SidebarToko menuItems={menuItems} />
       {/* Main Content Area */}

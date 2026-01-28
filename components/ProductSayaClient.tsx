@@ -96,7 +96,7 @@ export default function ProductSayaClient({
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col md:flex-row gap-4 bg-foreground dark:bg-background p-4 rounded-[2rem] border border-gray-200 dark:border-gray-200 shadow-sm">
+      <div className="flex flex-col md:flex-row gap-4 p-4 rounded-[2rem] border border-gray-200 dark:border-gray-200 shadow-sm">
         <div className="relative flex-1 group">
           <Search
             className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-orange-600 transition-colors"
@@ -107,13 +107,13 @@ export default function ProductSayaClient({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari produk kamu..."
-            className="w-full pl-14 pr-6 py-3 bg-foreground dark:bg-background text-background dark:text-foreground border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
+            className="w-full pl-14 pr-6 py-3 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
           />
         </div>
         <select
           value={searchParams.get("status") || "semua"}
           onChange={(e) => handleFilterChange(e.target.value)}
-          className="px-6 py-3 bg-foreground dark:bg-background text-background dark:text-foreground  border-none rounded-2xl font-black outline-none cursor-pointer"
+          className="px-6 py-3 border-none rounded-2xl font-black outline-none cursor-pointer"
         >
           <option value="semua">Semua Status</option>
           <option value="Approved">Disetujui</option>
@@ -128,7 +128,7 @@ export default function ProductSayaClient({
           products.map((product) => (
             <div
               key={product.id}
-              className="group bg-foreground dark:bg-background p-6 rounded-[2.5rem] border border-gray-100 dark:border-orange-500 hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-none transition-all flex flex-col md:flex-row items-center gap-6"
+              className="group p-6 rounded-[2.5rem] border border-gray-100 dark:border-orange-500 hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-none transition-all flex flex-col md:flex-row items-center gap-6"
             >
               {/* Image Preview */}
               <div className="w-full md:w-32 h-32 rounded-3xl overflow-hidden bg-gray-100 shrink-0 border-4 border-gray-50 dark:border-gray-800">
@@ -143,9 +143,7 @@ export default function ProductSayaClient({
 
               {/* Main Info */}
               <div className="flex-1 space-y-1 text-center md:text-left">
-                <h3 className="text-xl font-black text-background dark:text-foreground">
-                  {product.nama}
-                </h3>
+                <h3 className="text-xl font-black ">{product.nama}</h3>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm font-bold">
                   <p className="text-orange-600">
                     Rp {product.price.toLocaleString("id-ID")}
@@ -198,7 +196,7 @@ export default function ProductSayaClient({
             </div>
           ))
         ) : (
-          <div className="group bg-foreground dark:bg-background p-6 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-none transition-all flex flex-col md:flex-row items-center gap-6">
+          <div className="group p-6 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-none transition-all flex flex-col md:flex-row items-center gap-6">
             <p className="text-gray-500 font-medium text-center w-full">
               Tidak ada produk ditemukan.
             </p>

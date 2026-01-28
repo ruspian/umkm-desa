@@ -127,7 +127,7 @@ export default function PenjualProfileClient({
       {/* HEADER & ACTIONS */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black tracking-tight text-background dark:text-foreground">
+          <h1 className="text-4xl font-black tracking-tight">
             Profil <span className="text-orange-600">Toko UMKM</span>
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -146,7 +146,7 @@ export default function PenjualProfileClient({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Branding & Identitas */}
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-foreground dark:bg-background rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
+          <div className="rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
               <Store className="text-orange-600" size={24} />{" "}
               <span className="text-background dark:text-foreground">
@@ -156,7 +156,7 @@ export default function PenjualProfileClient({
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
+                <label className="text-xs font-black uppercase tracking-widest ml-1">
                   Nama Toko / UMKM
                 </label>
                 <input
@@ -166,13 +166,13 @@ export default function PenjualProfileClient({
                     handleInputChange("namaToko", e.target.value)
                   }
                   name="namaToko"
-                  placeholder="Contoh: Keripik Tempe Barokah"
+                  placeholder="Keripik Tempe Barokah"
                   className="w-full px-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl font-bold outline-none focus:ring-2 ring-orange-500/20"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
+                <label className="text-xs font-black uppercase tracking-widest ml-1">
                   Deskripsi Singkat Toko
                 </label>
                 <textarea
@@ -200,7 +200,7 @@ export default function PenjualProfileClient({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2 md:col-span-2">
-                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
+                <label className="text-xs font-black uppercase tracking-widest ml-1">
                   No. WhatsApp
                 </label>
                 <div className="relative">
@@ -222,7 +222,7 @@ export default function PenjualProfileClient({
               </div>
 
               <div className="md:col-span-2 space-y-2">
-                <label className="text-xs font-black text-background dark:text-foreground uppercase tracking-widest ml-1">
+                <label className="text-xs font-black uppercase tracking-widest ml-1">
                   Alamat Lengkap
                 </label>
                 <input
@@ -240,7 +240,7 @@ export default function PenjualProfileClient({
         {/* logo dan verifikasi toko */}
         <div className="space-y-8">
           {/* Logo Toko */}
-          <div className="bg-foreground dark:bg-background rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col items-center text-center">
+          <div className="rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col items-center text-center">
             {formData.logo ? (
               <div className="relative w-40 h-40 rounded-[2.5rem] overflow-hidden group border-4 border-gray-50 dark:border-gray-800 shadow-xl">
                 <Image
@@ -279,9 +279,7 @@ export default function PenjualProfileClient({
                 />
               </div>
             )}
-            <h4 className="mt-8 font-black text-xl text-background dark:text-foreground">
-              Logo UMKM
-            </h4>
+            <h4 className="mt-8 font-black text-xl ">Logo UMKM</h4>
             <p className="text-sm text-gray-400 font-medium mt-1 px-4">
               Disarankan ukuran 1:1 (Persegi) dengan kualitas tinggi.
             </p>
