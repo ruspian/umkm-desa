@@ -190,7 +190,7 @@ export default function PenjualProfileClient({
           </div>
 
           {/* Kontak & Lokasi */}
-          <div className="bg-foreground dark:bg-background rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
+          <div className="rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
               <MapPin className="text-orange-600" size={24} />{" "}
               <span className="text-background dark:text-foreground">

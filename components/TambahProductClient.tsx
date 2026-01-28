@@ -198,7 +198,7 @@ export default function TambahPoductClient({
               </div>
             ) : (
               /* Tampilan Dropzone jika belum ada gambar */
-              <label className="border-4 border-dashed border-gray-100 dark:border-gray-800 rounded-[2.5rem] p-12 flex flex-col items-center justify-center group hover:border-orange-200 transition-colors cursor-pointer bg-foreground dark:bg-background">
+              <label className="border-4 border-dashed border-gray-100 dark:border-gray-800 rounded-[2.5rem] p-12 flex flex-col items-center justify-center group hover:border-orange-200 transition-colors cursor-pointer">
                 <div className="w-16 h-16 bg-white dark:bg-gray-700 rounded-2xl flex items-center justify-center text-orange-600 shadow-xl group-hover:scale-110 transition-transform mb-4">
                   <ImagePlus size={32} />
                 </div>

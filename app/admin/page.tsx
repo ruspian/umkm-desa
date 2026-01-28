@@ -1,13 +1,9 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import {
-  Users,
-  Package,
-  MessageSquare,
-  ArrowUpRight,
-  Activity,
-} from "lucide-react";
+import { Users, Package, ArrowUpRight, Activity, Store } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 export default async function AdminDashboard() {
   const session = await auth();
@@ -16,8 +12,20 @@ export default async function AdminDashboard() {
     redirect("/");
   }
 
-  const totalUser = await prisma.user.count();
-  const totalProduk = await prisma.product.count();
+  const [toko, totalUser, totalProduk, totalToko] = await prisma.$transaction([
+    prisma.toko.findMany({
+      where: { isVerified: false },
+      include: { user: true },
+      orderBy: { createdAt: "asc" },
+    }),
+    prisma.user.count(),
+    prisma.product.count({
+      where: { status: "Approved" },
+    }),
+    prisma.toko.count({
+      where: { isVerified: true },
+    }),
+  ]);
 
   const stats = [
     {
@@ -25,7 +33,7 @@ export default async function AdminDashboard() {
       value: totalUser,
       icon: <Users className="text-blue-600" />,
       color: "bg-blue-50",
-      detail: "Warga & Pelaku UMKM",
+      detail: "Pengguna Terdaftar",
     },
     {
       label: "Produk UMKM",
@@ -35,11 +43,11 @@ export default async function AdminDashboard() {
       detail: "Aktif di Katalog",
     },
     {
-      label: "Pesan Bantuan",
-      value: "0",
-      icon: <MessageSquare className="text-emerald-600" />,
+      label: "Total Toko",
+      value: totalToko,
+      icon: <Store className="text-emerald-600" />,
       color: "bg-emerald-50",
-      detail: "Tiket Support",
+      detail: "Toko terverifikasi",
     },
   ];
 
@@ -58,14 +66,14 @@ export default async function AdminDashboard() {
         </div>
         <div className="flex items-center gap-2 bg-white dark:bg-gray-900 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
           <div className="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center text-white font-bold">
-            {session.user.name.charAt(0)}
+            {session.user.name.charAt(0).toUpperCase()}
           </div>
           <div className="pr-4 pl-2">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-tighter">
               Status
             </p>
             <p className="text-sm font-black text-gray-900 dark:text-white">
-              Admin Utama
+              {session.user.role}
             </p>
           </div>
         </div>
@@ -112,37 +120,56 @@ export default async function AdminDashboard() {
         <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
-              <Activity className="text-orange-600" /> Pendaftar Terbaru
+              <Activity className="text-orange-600" /> Konfirmasi Toko
             </h3>
-            <button className="text-sm font-bold text-gray-400 hover:text-orange-600 transition-colors">
+            <Link
+              href="/admin/toko"
+              className="text-sm font-bold text-gray-400 hover:text-orange-600 transition-colors"
+            >
               Lihat Semua
-            </button>
+            </Link>
           </div>
 
           <div className="space-y-6">
             {/* Mockup Row */}
-            {[1, 2].map((item) => (
+            {toko?.map((item) => (
               <div
-                key={item}
+                key={item.id}
                 className="flex items-center justify-between p-4 rounded-3xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse" />
+                  {item.logo ? (
+                    <Image
+                      src={item.logo ?? ""}
+                      alt={item.namaToko}
+                      width={50}
+                      height={50}
+                      className="w-10 h-10 rounded-xl"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center text-gray-400">
+                      <Store size={24} />
+                    </div>
+                  )}
                   <div>
                     <p className="font-black text-gray-900 dark:text-white">
-                      Memuat Data...
+                      {item.namaToko}
                     </p>
                     <p className="text-xs font-medium text-gray-400">
-                      Menunggu sinkronisasi Neon
+                      {item.user.email}
                     </p>
                   </div>
                 </div>
-                <div className="h-8 w-24 bg-gray-100 dark:bg-gray-800 rounded-xl" />
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/admin/toko/${item.id}`}
+                    className="px-4 py-2 bg-orange-600 text-white rounded-xl font-bold text-sm hover:bg-orange-700 transition-colors"
+                  >
+                    Verifikasi
+                  </Link>
+                </div>
               </div>
             ))}
-            <p className="text-center text-sm text-gray-400 font-medium italic pt-4">
-              Data diambil langsung dari Neon Database kamu.
-            </p>
           </div>
         </div>
 

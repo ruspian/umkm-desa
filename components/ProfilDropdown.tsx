@@ -19,7 +19,7 @@ export default function ProfilDropdown() {
   return (
     <div className="flex items-center justify-center min-h-100 p-4">
       <Dropdown>
-        <DropdownTrigger className="cursor-pointer text-background dark:text-foreground hover:bg-orange-500 rounded-full p-2">
+        <DropdownTrigger className="cursor-pointer hover:bg-orange-500 rounded-full p-2">
           <User className="h-5 w-5" />
         </DropdownTrigger>
         <DropdownContent align="end" className="w-56">

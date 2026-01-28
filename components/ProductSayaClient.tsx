@@ -134,7 +134,7 @@ export default function ProductSayaClient({
               <div className="w-full md:w-32 h-32 rounded-3xl overflow-hidden bg-gray-100 shrink-0 border-4 border-gray-50 dark:border-gray-800">
                 <Image
                   src={product.images}
-                  alt={product.nama}
+                  alt={product.nama as string}
                   width={300}
                   height={300}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -190,7 +190,7 @@ export default function ProductSayaClient({
                 </Link>
                 <ModalDelete
                   productId={product.id}
-                  productName={product.nama}
+                  productName={product.nama as string}
                 />
               </div>
             </div>

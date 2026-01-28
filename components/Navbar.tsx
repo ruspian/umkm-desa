@@ -5,6 +5,7 @@ import { ShoppingCart, Search, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import ProfilDropdown from "./ProfilDropdown";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -13,14 +14,14 @@ const Navbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-100 w-full px-4 pt-4">
       {/* Container utama dengan efek Glassmorphism */}
-      <div className="max-w-7xl mx-auto h-16 md:h-20 bg-foreground/80 dark:bg-background/80 backdrop-blur-xl border  shadow-2xl shadow-gray-200/50 dark:shadow-none rounded-lg px-6 flex items-center justify-between gap-6 transition-all">
+      <div className="max-w-7xl mx-auto h-16 md:h-20  backdrop-blur-xl border  shadow-2xl shadow-gray-200/50 dark:shadow-none rounded-lg px-6 flex items-center justify-between gap-6 transition-all">
         {/* logo */}
         <div className="shrink-0">
           <Link href="/" className="group flex items-center gap-1">
             <div className="w-10 h-10 bg-orange-600 rounded-2xl flex items-center justify-center text-white rotate-3 group-hover:rotate-0 transition-transform duration-300">
               <span className="font-black text-xl">A</span>
             </div>
-            <span className="text-2xl font-black tracking-tighter text-background dark:text-foreground hidden md:block">
+            <span className="text-2xl font-black tracking-tighter hidden md:block">
               Asli<span className="text-orange-600">Sini</span>
             </span>
           </Link>
@@ -57,8 +58,11 @@ const Navbar: React.FC = () => {
               <Search className="w-5 h-5" />
             </button>
 
+            {/* tombol tema  */}
+            <ThemeToggle />
+
             {/* Keranjang dengan Badge Modern */}
-            <button className="relative p-3 text-background dark:text-foreground hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:text-orange-600 rounded-2xl transition-all">
+            <button className="relative p-3 hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:text-orange-600 rounded-2xl transition-all">
               <ShoppingCart className="w-5 h-5" />
               <span className="absolute top-2 right-2 flex h-4 w-4">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
