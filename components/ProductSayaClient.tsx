@@ -17,6 +17,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import ModalDelete from "./ModalDelete";
+import { toast } from "sonner";
+import { DeleteProduct } from "@/lib/action";
 
 export default function ProductSayaClient({
   products,
@@ -70,6 +72,25 @@ export default function ProductSayaClient({
     const params = new URLSearchParams(searchParams);
     params.set("page", page.toString());
     router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const handleDelete = async (id: string) => {
+    toast.promise(
+      async () => {
+        const res = await DeleteProduct(id);
+
+        if (!res.success) {
+          throw new Error(res.message || "Gagal menghapus produk.");
+        }
+
+        return res;
+      },
+      {
+        loading: "Menghapus produk...",
+        success: (data) => data.message || "Produk berhasil dihapus.",
+        error: (err) => err.message || "Gagal menghapus produk.",
+      },
+    );
   };
 
   return (
@@ -189,8 +210,8 @@ export default function ProductSayaClient({
                   <Edit3 size={20} />
                 </Link>
                 <ModalDelete
-                  productId={product.id}
-                  productName={product.nama as string}
+                  onConfirm={() => handleDelete(product.id)}
+                  name={product.nama as string}
                 />
               </div>
             </div>

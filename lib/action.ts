@@ -11,6 +11,7 @@ import { auth } from "./auth";
 import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { TokoType } from "@/types/toko";
+import { UserFormInput } from "@/types/user";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -506,6 +507,170 @@ export const CreateToko = async (data: TokoType) => {
       }
     }
 
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungs ganti role user
+export const ChangeUserRole = async (userId: string, role: Role) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session?.user.role !== "ADMIN") {
+      return {
+        message: "Akses ditolak, Silahkan Login!",
+        success: false,
+      };
+    }
+
+    if (!role) {
+      return {
+        message: "Pilih role terlebih dahulu!",
+        success: false,
+      };
+    }
+
+    // jangan ubah role admin yang sedang login
+    if (session.user.id === userId) {
+      return {
+        message: "Anda tidak dapat mengubah role anda sendiri!",
+        success: false,
+      };
+    }
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: role as Role },
+    });
+
+    revalidatePath("/admin/users");
+
+    return {
+      message: "Role berhasil diubah!",
+      success: true,
+    };
+  } catch (error) {
+    console.log("gagal ganti role user:", error);
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi buat user baru admin
+export const CreateNewUser = async (data: UserFormInput) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session?.user.role !== "ADMIN") {
+      return {
+        message: "Akses ditolak, Silahkan Login!",
+        success: false,
+      };
+    }
+
+    const { name, email, role } = data;
+
+    if (!name || !email || !role) {
+      return {
+        message: "Data belum lengkap!",
+        success: false,
+      };
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: email as string,
+      },
+    });
+
+    if (existingUser) {
+      return {
+        message: "Email sudah terpakai, gunakan email lain!",
+        success: false,
+      };
+    }
+
+    const hashedPassword = await bcrypt.hash("123456", 12);
+
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role: role,
+      },
+    });
+
+    revalidatePath("/admin/users");
+
+    return {
+      message: "User berhasil dibuat!",
+      success: true,
+      data: newUser,
+    };
+  } catch (error) {
+    console.log("gagal menambahkan pengguna:", error);
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return {
+          message: "Email sudah terpakai, gunakan email lain!",
+          success: false,
+        };
+      }
+    }
+
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi hapus user
+export const DeleteUser = async (id: string) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session?.user.role !== "ADMIN") {
+      return {
+        message: "Akses ditolak, Silahkan Login!",
+        success: false,
+      };
+    }
+
+    if (!id) {
+      return {
+        message: "Pilih user terlebih dahulu!",
+        success: false,
+      };
+    }
+
+    if (session.user.id === id) {
+      return {
+        message: "Anda tidak dapat menghapus diri sendiri!",
+        success: false,
+      };
+    }
+
+    const deletedUser = await prisma.user.delete({
+      where: { id: id },
+    });
+
+    revalidatePath("/admin/users");
+
+    return {
+      message: "User berhasil dihapus!",
+      success: true,
+      data: deletedUser,
+    };
+  } catch (error) {
+    console.log("gagal menghapus user:", error);
     return {
       message: "Kesalahan pada server!",
       success: false,

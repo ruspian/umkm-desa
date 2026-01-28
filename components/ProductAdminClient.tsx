@@ -53,7 +53,7 @@ const ProductAdminClient = ({
             Daftar <span className="text-orange-600">Produk</span>
           </h1>
           <p className="text-gray-500 font-medium mt-1">
-            Total {products.length} produk terdaftar di ekosistem AsliSini.
+            Daftar produk yang telah terkonfirmasi di ekosistem AsliSini.
           </p>
         </div>
       </div>

@@ -27,8 +27,8 @@ type EditProductProps = {
 };
 
 export interface ModalDeleteProps {
-  productId: string;
-  productName: string;
+  name: string;
+  onConfirm: () => Promise<void> | void;
 }
 
 export type ProductAdminType = {

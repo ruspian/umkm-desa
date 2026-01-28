@@ -1,39 +1,16 @@
-"use client";
-
 import { Trash2, AlertCircle } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import { DeleteProduct } from "@/lib/action";
 import { ModalDeleteProps } from "@/types/product";
+import { useState } from "react";
 
-export default function ModalDelete({
-  productId,
-  productName,
-}: ModalDeleteProps) {
+export default function ModalDelete({ onConfirm, name }: ModalDeleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
-    toast.promise(
-      async () => {
-        setLoading(true);
-        const res = await DeleteProduct(productId);
-
-        if (!res.success) {
-          setIsOpen(false);
-
-          throw new Error(res.message || "Gagal menghapus produk.");
-        }
-        setLoading(false);
-
-        return res;
-      },
-      {
-        loading: "Menghapus produk...",
-        success: (data) => data.message || "Produk berhasil dihapus.",
-        error: (err) => err.message || "Gagal menghapus produk.",
-      },
-    );
+    setLoading(true);
+    await onConfirm();
+    setLoading(false);
+    setIsOpen(false);
   };
 
   return (
@@ -61,7 +38,7 @@ export default function ModalDelete({
               <p className="text-gray-500 text-sm">
                 Kamu yakin ingin menghapus{" "}
                 <span className="font-bold text-gray-900 dark:text-white">
-                  &quot;{productName}&quot;
+                  &quot;{name}&quot;
                 </span>
                 ? Data yang dihapus tidak bisa dikembalikan.
               </p>
