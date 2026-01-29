@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -9,7 +9,8 @@ import Pagination from "./Pagination";
 import { TokoAdminProps } from "@/types/toko";
 import ModalDelete from "./ModalDelete";
 import { toast } from "sonner";
-import { DeleteToko, VerifyToko } from "@/lib/action";
+import { DeleteToko } from "@/lib/action";
+import Link from "next/link";
 
 const TokoAdminClient = ({
   toko,
@@ -54,15 +55,6 @@ const TokoAdminClient = ({
       loading: "Menghapus toko...",
       success: (data) => data.message || "Toko berhasil dihapus.",
       error: (err) => err.message || "Gagal menghapus toko.",
-    });
-  };
-
-  const handleVerifyToko = async (id: string) => {
-    if (!id) return;
-    toast.promise(VerifyToko(id), {
-      loading: "Tunggu sebentar...",
-      success: (data) => data.message,
-      error: (err) => err.message,
     });
   };
 
@@ -168,15 +160,14 @@ const TokoAdminClient = ({
                     </td>
                     <td className="px-8 py-6 text-right">
                       <div className="flex items-center gap-2 justify-end">
-                        {item.isVerified && (
-                          <button
-                            title="Cabut Verifikasi"
-                            onClick={() => handleVerifyToko(item.id as string)}
-                            className="w-10 h-10 flex items-center justify-center  text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"
+                        <div className="flex justify-end gap-2">
+                          <Link
+                            href={`/admin/kurasi-toko/${item.slug as string}`}
+                            className="p-3 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-orange-600 hover:text-white transition-all"
                           >
-                            <X size={18} />
-                          </button>
-                        )}
+                            <Eye size={18} />
+                          </Link>
+                        </div>
                         <ModalDelete
                           onConfirm={() => handleDelete(item.id as string)}
                           name={item.namaToko}

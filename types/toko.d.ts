@@ -12,6 +12,7 @@ export type TokoType = {
   noWhatsapp: string | null;
   isVerified?: boolean;
   createdAt?: Date;
+  slug: string;
 };
 
 export type TokoProps = {
@@ -25,4 +26,8 @@ export type TokoAdminProps = {
   totalPages: number;
   totalCount: number;
   totalProduct: number;
+};
+
+export type KurasiTokoProps = {
+  daftarToko: TokoType[];
 };
