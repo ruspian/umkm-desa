@@ -39,9 +39,12 @@ export type ProductAdminType = {
   discount: number;
   images: string;
   createdAt: Date;
+  category: KategoriType;
+  description: string;
+  slug?: string;
   toko: {
-    id: string;
-    namaToko: string;
+    id?: string | null;
+    namaToko?: string | null;
     user: {
       name: string | null;
       email: string | null;

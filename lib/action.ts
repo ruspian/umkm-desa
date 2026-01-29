@@ -2,7 +2,7 @@
 
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
-import { Category, Prisma, Role } from "@prisma/client";
+import { Category, Prisma, Role, StatusProduct } from "@prisma/client";
 import { Register } from "@/types/register";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryDelete, CloudinaryUpload } from "@/types/cloudinary";
@@ -724,7 +724,7 @@ export const DeleteToko = async (id: string) => {
   }
 };
 
-// fungsi kembalikan toko ke tidak terverifikasi
+// fungsi verifikasi toko
 export const VerifyToko = async (id: string) => {
   try {
     const session = await auth();
@@ -754,6 +754,39 @@ export const VerifyToko = async (id: string) => {
       message: updatedToko.isVerified
         ? `Toko ${toko.namaToko} berhasil diverifikasi!`
         : `Verifikasi toko ${toko.namaToko} telah dicabut!`,
+    };
+  } catch (error) {
+    console.error("Gagal update verify:", error);
+    return { success: false, message: "Kesalahan pada server!" };
+  }
+};
+
+// fungsi verifikasi produk
+export const VerifyProduct = async (id: string, data: string) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session.user.role !== "ADMIN") {
+      return {
+        message: "Akses ditolak, hanya Admin yang bisa verifikasi!",
+        success: false,
+      };
+    }
+
+    // Update status produk
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: { status: data as StatusProduct },
+    });
+
+    revalidatePath("/admin/kurasi-products");
+
+    return {
+      success: true,
+      message:
+        updatedProduct.status === "Approved"
+          ? "Produk berhasil disetujui!"
+          : "Produk telah ditolak!",
     };
   } catch (error) {
     console.error("Gagal update verify:", error);
