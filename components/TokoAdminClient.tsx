@@ -1,24 +1,23 @@
 "use client";
 
-import { Search } from "lucide-react";
-import { formatCurrency } from "@/lib/formatRupiah";
-import { formatDateDisplay } from "@/lib/formatDate";
+import { Search, X } from "lucide-react";
 import Image from "next/image";
-import { ProductAdminProps } from "@/types/product";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Pagination from "./Pagination";
+import { TokoAdminProps } from "@/types/toko";
 import ModalDelete from "./ModalDelete";
 import { toast } from "sonner";
-import { DeleteProduct } from "@/lib/action";
+import { DeleteToko, VerifyToko } from "@/lib/action";
 
-const ProductAdminClient = ({
-  products,
+const TokoAdminClient = ({
+  toko,
   totalCount,
   currentPage,
   totalPages,
-}: ProductAdminProps) => {
+  totalProduct,
+}: TokoAdminProps) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
 
@@ -51,38 +50,37 @@ const ProductAdminClient = ({
   const handleDelete = async (id: string) => {
     if (!id) return;
 
-    toast.promise(
-      async () => {
-        const res = await DeleteProduct(id);
-
-        if (!res.success) {
-          throw new Error(res.message || "Gagal menghapus produk.");
-        }
-
-        return res;
-      },
-      {
-        loading: "Menghapus produk...",
-        success: (data) => data.message || "Produk berhasil dihapus.",
-        error: (err) => err.message || "Gagal menghapus produk.",
-      },
-    );
+    toast.promise(DeleteToko(id), {
+      loading: "Menghapus toko...",
+      success: (data) => data.message || "Toko berhasil dihapus.",
+      error: (err) => err.message || "Gagal menghapus toko.",
+    });
   };
+
+  const handleVerifyToko = async (id: string) => {
+    if (!id) return;
+    toast.promise(VerifyToko(id), {
+      loading: "Tunggu sebentar...",
+      success: (data) => data.message,
+      error: (err) => err.message,
+    });
+  };
+
   return (
     <div className="p-4 md:p-10 max-w-400 mx-auto space-y-10">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
-            Daftar <span className="text-orange-600">Produk</span>
+            Daftar <span className="text-orange-600">Toko</span>
           </h1>
           <p className="text-gray-500 font-medium mt-1">
-            Daftar produk yang telah terkonfirmasi di ekosistem AsliSini.
+            Daftar toko yang telah terkonfirmasi di ekosistem AsliSini.
           </p>
         </div>
       </div>
 
-      {/* Toolbar: Search & Filter */}
+      {/*  Search  */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-gray-900 p-4 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-sm">
         <div className="relative w-full group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-orange-600 transition-colors w-5 h-5" />
@@ -96,48 +94,43 @@ const ProductAdminClient = ({
         </div>
       </div>
 
-      {/* Modern Table Container */}
+      {/*  Table Container */}
       <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-gray-50 dark:border-gray-800">
                 <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
+                  Nama
+                </th>
+                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
+                  Alamat
+                </th>
+                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
+                  Whatsapp
+                </th>
+                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
                   Produk
                 </th>
-                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
-                  Toko
-                </th>
-                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
-                  Harga
-                </th>
-                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
-                  Stok
-                </th>
-                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
-                  Diskon
-                </th>
-                <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400">
-                  Tanggal Dibuat
-                </th>
+
                 <th className="px-8 py-6 text-sm font-black uppercase tracking-widest text-gray-400 text-right">
                   Aksi
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
-              {products.length > 0 ? (
-                products.map((product) => (
+              {toko.length > 0 ? (
+                toko.map((item) => (
                   <tr
-                    key={product.id}
+                    key={item.id}
                     className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-all"
                   >
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
-                        {product.images ? (
+                        {item.logo ? (
                           <Image
-                            src={product.images}
-                            alt={product.name as string}
+                            src={item.logo}
+                            alt={item.namaToko as string}
                             width={48}
                             height={48}
                             className="w-12 h-12 rounded-2xl object-cover"
@@ -145,49 +138,50 @@ const ProductAdminClient = ({
                           />
                         ) : (
                           <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-orange-100 to-orange-50 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center text-orange-600 font-black text-lg shadow-inner">
-                            {product.name?.charAt(0).toUpperCase()}
+                            {item.namaToko?.charAt(0).toUpperCase()}
                           </div>
                         )}
                         <div>
                           <p className="font-black text-gray-900 dark:text-white leading-none mb-1">
-                            {product.name}
+                            {item.namaToko}
                           </p>
                           <p className="text-sm text-gray-400 font-medium">
-                            {product.toko?.user?.email}
+                            {item.user?.email}
                           </p>
                         </div>
                       </div>
                     </td>
                     <td className="px-8 py-6">
                       <p className="text-sm font-bold text-gray-500 dark:text-gray-400">
-                        {product.toko?.namaToko}
+                        {item.alamat}
                       </p>
                     </td>
                     <td className="px-8 py-6">
                       <p className="text-sm font-bold text-gray-500 dark:text-gray-400">
-                        {formatCurrency(product.price)}
+                        {item.noWhatsapp}
                       </p>
                     </td>
                     <td className="px-8 py-6">
                       <p className="text-sm font-bold text-gray-500 dark:text-gray-400">
-                        {product.stock}
-                      </p>
-                    </td>
-                    <td className="px-8 py-6">
-                      <p className="text-sm font-bold text-gray-500 dark:text-gray-400">
-                        {product.discount}%
-                      </p>
-                    </td>
-                    <td className="px-8 py-6">
-                      <p className="text-sm font-bold text-gray-500 dark:text-gray-400">
-                        {formatDateDisplay(product.createdAt.toLocaleString())}
+                        {totalProduct} Produk
                       </p>
                     </td>
                     <td className="px-8 py-6 text-right">
-                      <ModalDelete
-                        onConfirm={() => handleDelete(product.id)}
-                        name={product.name}
-                      />
+                      <div className="flex items-center gap-2 justify-end">
+                        {item.isVerified && (
+                          <button
+                            title="Cabut Verifikasi"
+                            onClick={() => handleVerifyToko(item.id as string)}
+                            className="w-10 h-10 flex items-center justify-center  text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"
+                          >
+                            <X size={18} />
+                          </button>
+                        )}
+                        <ModalDelete
+                          onConfirm={() => handleDelete(item.id as string)}
+                          name={item.namaToko}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -202,7 +196,7 @@ const ProductAdminClient = ({
                       </div>
                       <div className="space-y-1">
                         <p className="text-xl font-black text-gray-900 dark:text-white">
-                          Produk tidak ditemukan
+                          Toko tidak ditemukan
                         </p>
                         <p className="text-sm text-gray-500 font-medium">
                           Coba gunakan kata kunci lain atau periksa filter kamu.
@@ -220,7 +214,7 @@ const ProductAdminClient = ({
             totalCount={totalCount}
             totalPages={totalPages}
             handlePageChange={handleChangePage}
-            data="Produk"
+            data="Toko"
           />
         </div>
       </div>
@@ -228,4 +222,4 @@ const ProductAdminClient = ({
   );
 };
 
-export default ProductAdminClient;
+export default TokoAdminClient;

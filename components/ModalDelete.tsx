@@ -17,6 +17,7 @@ export default function ModalDelete({ onConfirm, name }: ModalDeleteProps) {
     <>
       {/* Tombol Pemicu */}
       <button
+        title="Hapus"
         onClick={() => setIsOpen(true)}
         className="w-10 h-10 flex items-center justify-center  text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"
       >

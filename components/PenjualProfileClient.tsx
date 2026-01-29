@@ -73,7 +73,7 @@ export default function PenjualProfileClient({
     toast.promise(
       async () => {
         await deleteFromCloudinary({
-          url: formData.logo,
+          url: formData.logo as string,
           resourceType: "image",
         });
 
@@ -176,7 +176,7 @@ export default function PenjualProfileClient({
                   Deskripsi Singkat Toko
                 </label>
                 <textarea
-                  value={formData.deskripsi}
+                  value={formData.deskripsi as string}
                   onChange={(e) =>
                     handleInputChange("deskripsi", e.target.value)
                   }
@@ -209,9 +209,9 @@ export default function PenjualProfileClient({
                     size={18}
                   />
                   <input
-                    value={formData.noWhatsapp}
+                    value={formData.noWhatsapp as string}
                     onChange={(e) =>
-                      handleInputChange("whatsapp", e.target.value)
+                      handleInputChange("noWhatsapp", e.target.value)
                     }
                     name="whatsapp"
                     type="text"
@@ -226,7 +226,7 @@ export default function PenjualProfileClient({
                   Alamat Lengkap
                 </label>
                 <input
-                  value={formData.alamat}
+                  value={formData.alamat as string}
                   onChange={(e) => handleInputChange("alamat", e.target.value)}
                   type="text"
                   placeholder="Jl. Raya Utama No. 123..."

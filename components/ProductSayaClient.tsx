@@ -230,6 +230,7 @@ export default function ProductSayaClient({
         totalCount={totalCount}
         totalPages={totalPages}
         handlePageChange={handlePageChange}
+        data="Produk"
       />
     </div>
   );

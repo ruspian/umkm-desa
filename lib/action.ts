@@ -357,22 +357,30 @@ export const EditProduct = async (data: ProductType) => {
 // fungsi hapus produk
 export const DeleteProduct = async (id: string) => {
   const session = await auth();
+  const userRole = session?.user.role;
 
-  if (!session?.user || session?.user.role !== "PENJUAL") {
+  if (
+    !session?.user ||
+    (session?.user.role !== "PENJUAL" && session.user.role !== "ADMIN")
+  ) {
     return {
-      message: "Akses ditolak, Silahkan Login!",
+      message: "Akses ditolak, Anda tidak memiliki izin!",
       success: false,
     };
   }
 
   try {
-    const tokoId = await checkTokoVerified(session.user.id);
+    let tokoId = null;
 
-    if (!tokoId) {
-      return {
-        message: "Toko belum terverifikasi, Hubungi Admin!",
-        success: false,
-      };
+    if (userRole === "PENJUAL") {
+      tokoId = await checkTokoVerified(session.user.id);
+
+      if (!tokoId) {
+        return {
+          message: "Toko belum terverifikasi, Hubungi Admin!",
+          success: false,
+        };
+      }
     }
 
     const product = await prisma.product.findUnique({
@@ -389,7 +397,7 @@ export const DeleteProduct = async (id: string) => {
     }
 
     // hapus gambar dari cloudinary
-    if (product && product.images) {
+    if (product.images) {
       await DeleteImage({ url: product.images, resourceType: "image" });
     }
 
@@ -399,6 +407,7 @@ export const DeleteProduct = async (id: string) => {
     });
 
     revalidatePath("/toko/produk-saya");
+    revalidatePath("/admin/products");
     revalidatePath("/");
 
     return {
@@ -418,10 +427,9 @@ export const DeleteProduct = async (id: string) => {
 // fungsi buat profil toko
 export const CreateToko = async (data: TokoType) => {
   const session = await auth();
-
   if (!session?.user || session?.user.role !== "PENJUAL") {
     return {
-      message: "Akses ditolak, Silahkan Login!",
+      message: "Akses ditolak, Anda tidak memiliki izin!",
       success: false,
     };
   }
@@ -430,49 +438,35 @@ export const CreateToko = async (data: TokoType) => {
     const { namaToko, deskripsi, logo, alamat, noWhatsapp } = data;
 
     if (!namaToko || !deskripsi || !logo || !alamat || !noWhatsapp) {
-      return {
-        message: "Data belum lengkap!",
-        success: false,
-      };
+      return { message: "Data belum lengkap!", success: false };
     }
 
-    const oldToko = await prisma.toko.findUnique({
+    //  Cek apakah user SUDAH punya toko sebelumnya
+    const existingToko = await prisma.toko.findUnique({
       where: { userId: session.user.id },
     });
 
-    if (!oldToko) {
-      return {
-        message: "Toko tidak ditemukan!",
-        success: false,
-      };
-    }
-
-    // Jika ada foto baru dikirim DAN foto baru itu beda dengan foto lama
-    if (logo && logo !== oldToko.logo) {
-      try {
-        // Hapus foto yang LAMA dari Cloudinary
+    //  Jika SUDAH ADA toko dan dia ganti LOGO, hapus yang lama dari Cloudinary
+    if (existingToko && logo && logo !== existingToko.logo) {
+      if (existingToko.logo) {
         await DeleteImage({
-          url: oldToko.logo as string,
+          url: existingToko.logo,
           resourceType: "image",
-        });
-      } catch (cloudinaryErr) {
-        console.log(
-          "Gagal hapus foto lama, lanjut update data...",
-          cloudinaryErr,
-        );
-        //  biarkan lanjut agar data teks tetap terupdate meskipun hapus foto gagal
+        }).catch(() => console.log("Gagal hapus logo lama"));
       }
     }
 
+    // Generate Slug hanya untuk toko baru
     const generateSlug = slugify(namaToko, { lower: true });
-    const slug = generateSlug + "-" + Math.floor(Math.random() * 1000);
+    const slug = `${generateSlug}-${Math.floor(Math.random() * 1000)}`;
 
+    // Upsert
     const toko = await prisma.toko.upsert({
       where: { userId: session.user.id },
       update: {
         namaToko,
         deskripsi,
-        logo: logo,
+        logo,
         alamat,
         noWhatsapp,
       },
@@ -484,11 +478,12 @@ export const CreateToko = async (data: TokoType) => {
         noWhatsapp,
         slug,
         userId: session.user.id,
+        isVerified: false,
       },
     });
 
     revalidatePath("/toko/profile");
-    revalidatePath(`/seller/${toko.slug}`);
+    revalidatePath("/admin/toko");
 
     return {
       message: "Profil toko berhasil disimpan!",
@@ -675,5 +670,93 @@ export const DeleteUser = async (id: string) => {
       message: "Kesalahan pada server!",
       success: false,
     };
+  }
+};
+
+// fungsi hapus toko
+export const DeleteToko = async (id: string) => {
+  try {
+    const session = await auth();
+
+    if (session?.user.role !== "ADMIN") {
+      return { message: "Akses ditolak!", success: false };
+    }
+
+    // Ambil data produk & gambar sebelum dihapus
+    const toko = (await prisma.toko.findUnique({
+      where: { id },
+      include: {
+        products: { select: { images: true } },
+        user: { select: { id: true } },
+      },
+    })) as Prisma.TokoGetPayload<{
+      include: { products: true; user: true };
+    }> | null;
+
+    if (!toko) return { message: "Toko tidak ditemukan!", success: false };
+
+    // Hapus semua gambar produk toko tersebut dari Cloudinary
+    const imagePaths = toko.products
+      .map((p) => p.images)
+      .filter((img): img is string => !!img);
+
+    for (const path of imagePaths) {
+      await DeleteImage({ url: path, resourceType: "image" });
+    }
+
+    await prisma.toko.delete({ where: { id } });
+
+    // Kembalikan Role ke USER
+    await prisma.user.update({
+      where: { id: toko.user.id },
+      data: { role: "USER" },
+    });
+
+    revalidatePath("/admin/toko");
+
+    return {
+      message: "Toko dan seluruh datanya berhasil dihapus!",
+      success: true,
+    };
+  } catch (error) {
+    console.error("Gagal hapus toko:", error);
+    return { message: "Kesalahan pada server!", success: false };
+  }
+};
+
+// fungsi kembalikan toko ke tidak terverifikasi
+export const VerifyToko = async (id: string) => {
+  try {
+    const session = await auth();
+
+    if (session?.user.role !== "ADMIN") {
+      return { message: "Akses ditolak!", success: false };
+    }
+
+    // Cari data toko sekarang
+    const toko = await prisma.toko.findUnique({
+      where: { id },
+      select: { isVerified: true, namaToko: true },
+    });
+
+    if (!toko) return { message: "Toko tidak ditemukan!", success: false };
+
+    // Update dengan nilai kebalikannya
+    const updatedToko = await prisma.toko.update({
+      where: { id },
+      data: { isVerified: !toko.isVerified },
+    });
+
+    revalidatePath("/admin/toko");
+
+    return {
+      success: true,
+      message: updatedToko.isVerified
+        ? `Toko ${toko.namaToko} berhasil diverifikasi!`
+        : `Verifikasi toko ${toko.namaToko} telah dicabut!`,
+    };
+  } catch (error) {
+    console.error("Gagal update verify:", error);
+    return { success: false, message: "Kesalahan pada server!" };
   }
 };

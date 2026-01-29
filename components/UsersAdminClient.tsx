@@ -91,7 +91,7 @@ const UsersAdminClient = ({
             Daftar <span className="text-orange-600">Pengguna</span>
           </h1>
           <p className="text-gray-500 font-medium mt-1">
-            Total {users.length} pengguna terdaftar di ekosistem AsliSini.
+            Daftar semua pengguna yang terdaftar di ekosistem AsliSini.
           </p>
         </div>
 
@@ -208,6 +208,7 @@ const UsersAdminClient = ({
             totalCount={totalCount}
             totalPages={totalPages}
             handlePageChange={handleChangePage}
+            data="Pengguna"
           />
         </div>
       </div>
