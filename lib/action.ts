@@ -12,6 +12,7 @@ import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { TokoType } from "@/types/toko";
 import { UserFormInput } from "@/types/user";
+import { ProfilAdminType, UmumType } from "@/types/web.config";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -791,5 +792,124 @@ export const VerifyProduct = async (id: string, data: string) => {
   } catch (error) {
     console.error("Gagal update verify:", error);
     return { success: false, message: "Kesalahan pada server!" };
+  }
+};
+
+// fungsi buat konfigurasi web
+export const SaveGeneralConfig = async (data: UmumType) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session.user.role !== "ADMIN") {
+      return {
+        message: "Akses ditolak, anda tidak memiliki izin!",
+        success: false,
+      };
+    }
+
+    const { siteName, slogan, contactWa, isMaintenance, isOpenRegistration } =
+      data;
+
+    if (!siteName || !slogan || !contactWa) {
+      return {
+        message: "Semua field harus diisi!",
+        success: false,
+      };
+    }
+
+    const saveConfig = await prisma.webConfig.upsert({
+      where: { id: "site_configuration_id" },
+      update: {
+        siteName,
+        slogan,
+        contactWa,
+        isMaintenance,
+        isOpenRegistration,
+      },
+      create: {
+        id: "site_configuration_id",
+        siteName,
+        slogan,
+        contactWa,
+        isMaintenance,
+        isOpenRegistration,
+      },
+    });
+
+    revalidatePath("/admin/konfigurasi");
+
+    return {
+      message: "Konfigurasi web berhasil disimpan!",
+      success: true,
+      data: saveConfig,
+    };
+  } catch (error) {
+    console.log("gagal membuat konfigurasi web:", error);
+
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi save data profil admin
+export const SaveProfilAdminConfig = async (data: ProfilAdminType) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session.user.role !== "ADMIN") {
+      return {
+        message: "Akses ditolak, anda tidak memiliki izin!",
+        success: false,
+      };
+    }
+
+    const { id, name, email, image } = data;
+
+    if (!id || !name || !email || !image) {
+      return {
+        message: "Semua field harus diisi!",
+        success: false,
+      };
+    }
+
+    const existingEmail = await prisma.user.findUnique({
+      where: {
+        email: email as string,
+      },
+    });
+
+    if (existingEmail) {
+      return {
+        message: "Email sudah terdaftar!",
+        success: false,
+      };
+    }
+
+    const saveProfil = await prisma.user.update({
+      where: { id },
+      data: {
+        name,
+        email,
+        image,
+      },
+    });
+
+    revalidatePath("/admin/konfigurasi");
+    revalidatePath("/admin/users");
+
+    return {
+      message: "Profil admin berhasil disimpan!",
+      success: true,
+      data: saveProfil,
+    };
+  } catch (error) {
+    console.log("gagal update profil admin:", error);
+
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
   }
 };

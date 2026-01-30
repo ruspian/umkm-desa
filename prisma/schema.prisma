@@ -137,3 +137,13 @@ model Product {
   @@index([category])
   @@index([isFeatured])
 }
+
+model WebConfig {
+  id                 String   @id @default("system-settings")
+  siteName           String   @default("AsliSini")
+  slogan             String?
+  contactWa          String?
+  isOpenRegistration Boolean  @default(true)
+  isMaintenance      Boolean  @default(false)
+  updatedAt          DateTime @updatedAt
+}

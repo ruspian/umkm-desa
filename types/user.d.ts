@@ -5,8 +5,9 @@ export type Users = {
   name: string | null;
   email: string | null;
   role: Role | null;
-  createdAt: Date | null;
-  password: string | null;
+  createdAt?: Date | null;
+  password?: string | null;
+  image?: string | null;
 };
 
 export type UserProps = {
@@ -20,4 +21,10 @@ export type UserFormInput = {
   name: string;
   email: string;
   role: Role;
+};
+
+export type UserConfigType = {
+  name: string;
+  email: string;
+  image: string;
 };

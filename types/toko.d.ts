@@ -12,7 +12,7 @@ export type TokoType = {
   noWhatsapp: string | null;
   isVerified?: boolean;
   createdAt?: Date;
-  slug: string;
+  slug?: string;
 };
 
 export type TokoProps = {
