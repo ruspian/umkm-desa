@@ -12,7 +12,7 @@ import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { TokoType } from "@/types/toko";
 import { UserFormInput } from "@/types/user";
-import { ProfilAdminType, UmumType } from "@/types/web.config";
+import { ProfilAdminType, SecurityType, UmumType } from "@/types/web.config";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -909,6 +909,79 @@ export const SaveProfilAdminConfig = async (data: ProfilAdminType) => {
 
     return {
       message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi ganti password admin
+export const UpdateSecurityConfig = async (data: SecurityType) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session.user.role !== "ADMIN") {
+      return {
+        message: "Akses ditolak, anda tidak memiliki izin!",
+        success: false,
+      };
+    }
+
+    const { oldPassword, newPassword, confirmPassword } = data;
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      return {
+        message: "Semua field harus diisi!",
+        success: false,
+      };
+    }
+
+    if (newPassword !== confirmPassword) {
+      return {
+        message: "Password baru dan konfirmasi password harus sama!",
+        success: false,
+      };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+      select: { password: true },
+    });
+
+    const isPasswordValid = await bcrypt.compare(
+      oldPassword,
+      user?.password as string,
+    );
+
+    if (!isPasswordValid) {
+      return {
+        message: "Password lama salah!",
+        success: false,
+      };
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    const saveSecurity = await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    revalidatePath("/admin/konfigurasi");
+
+    return {
+      message: "Password berhasil diubah!",
+      success: true,
+      data: saveSecurity,
+    };
+  } catch (error) {
+    console.log("gagal update security:", error);
+
+    return {
+      messsage: "Kesalahan pada server!",
       success: false,
     };
   }

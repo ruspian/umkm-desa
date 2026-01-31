@@ -14,6 +14,12 @@ export type ProfilAdminType = {
   image: string | null;
 };
 
+export type SecurityType = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
 export type ConfigurationTypeProps = {
   webConfig?: UmumType | null;
   profilAdmin?: ProfilAdminType | null;
