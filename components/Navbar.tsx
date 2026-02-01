@@ -70,9 +70,9 @@ const Navbar: React.FC = () => {
             ) : (
               <Link
                 href="/login"
-                className="flex items-center gap-2 p-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-bold text-sm hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all active:scale-95"
+                className="flex items-center gap-2 p-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-bold text-sm hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all active:scale-95"
               >
-                <LogIn className="w-5 h-5" />
+                <LogIn className="w-4 h-4" />
               </Link>
             )}
           </div>

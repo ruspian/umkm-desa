@@ -18,6 +18,18 @@ export const useCart = create<CartStore>()(
           }
           return { items: [...state.items, { ...newItem, quantity: 1 }] };
         }),
+      updateQuantity: (id, type) =>
+        set((state) => ({
+          items: state.items.map((item) => {
+            if (item.id === id) {
+              const newQty =
+                type === "plus" ? item.quantity + 1 : item.quantity - 1;
+              // Minimal quantity adalah 1, jangan sampai nol atau minus
+              return { ...item, quantity: Math.max(1, newQty) };
+            }
+            return item;
+          }),
+        })),
       removeItem: (id) =>
         set((state) => ({
           items: state.items.filter((i) => i.id !== id),
