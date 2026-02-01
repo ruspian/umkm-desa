@@ -70,6 +70,10 @@ export type HomeProductType = {
   category: KategoriType;
   description: string;
   toko: {
+    id?: string | null;
     namaToko?: string | null;
+    noWhatsapp?: string | null;
+    logo?: string | null;
+    alamat?: string | null;
   } | null;
 };

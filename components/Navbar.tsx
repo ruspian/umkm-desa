@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { ShoppingCart, Search, LogIn } from "lucide-react";
+import { Search, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import ProfilDropdown from "./ProfilDropdown";
 import { ThemeToggle } from "./ThemeToggle";
+import CartBadge from "./CartBadge";
 
 const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -60,20 +61,12 @@ const Navbar: React.FC = () => {
 
             {/* tombol tema  */}
             <ThemeToggle />
-
-            {/* Keranjang dengan Badge Modern */}
-            <button className="relative p-3 hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:text-orange-600 rounded-2xl transition-all">
-              <ShoppingCart className="w-5 h-5" />
-              <span className="absolute top-2 right-2 flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-orange-600 text-[10px] font-black text-white items-center justify-center">
-                  3
-                </span>
-              </span>
-            </button>
-
             {status === "authenticated" ? (
-              <ProfilDropdown />
+              <>
+                {/* Keranjang dengan Badge Modern */}
+                <CartBadge />
+                <ProfilDropdown />
+              </>
             ) : (
               <Link
                 href="/login"
