@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Globe, Shield, Bell, User as UserIcon } from "lucide-react";
+import { Globe, Shield, User as UserIcon } from "lucide-react";
 import TabUmum from "@/components/TabUmum";
 import TabProfilAdmin from "@/components/TabProfilAdmin";
 import TabKeamanan from "@/components/TabKeamanan";
-import TabNotifikasi from "@/components/TabNotifikasi";
 import { ConfigurationTypeProps, UmumType } from "@/types/web.config";
 
 export default function ConfigurationClient({
@@ -19,7 +18,6 @@ export default function ConfigurationClient({
     { label: "Umum", icon: <Globe size={20} /> },
     { label: "Profil Admin", icon: <UserIcon size={20} /> },
     { label: "Keamanan", icon: <Shield size={20} /> },
-    { label: "Notifikasi", icon: <Bell size={20} /> },
   ];
 
   return (
@@ -74,9 +72,6 @@ export default function ConfigurationClient({
 
           {/* TAB: KEAMANAN */}
           {activeTab === "Keamanan" && <TabKeamanan />}
-
-          {/* TAB: NOTIFIKASI */}
-          {activeTab === "Notifikasi" && <TabNotifikasi />}
         </div>
       </div>
     </div>

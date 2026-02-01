@@ -98,7 +98,7 @@ export default function ProductSayaClient({
       {/* header dan tombol tambah */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-4xl font-black tracking-tight text-background dark:text-foreground">
+          <h1 className="text-4xl font-black tracking-tight">
             Produk <span className="text-orange-600">Saya</span>
           </h1>
           <p className="text-gray-500 font-medium mt-1">

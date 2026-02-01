@@ -58,3 +58,18 @@ export type ProductAdminProps = {
   totalCount: number;
   totalPages: number;
 };
+
+export type HomeProductType = {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+  discount: number | null;
+  slug: string;
+  images: string;
+  category: KategoriType;
+  description: string;
+  toko: {
+    namaToko?: string | null;
+  } | null;
+};

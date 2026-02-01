@@ -11,7 +11,7 @@ export default async function MyProductsPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const session = await auth();
-  const params = await searchParams; // Tunggu promise searchParams
+  const params = await searchParams;
 
   const search = typeof params.search === "string" ? params.search : undefined;
   const status = typeof params.status === "string" ? params.status : "semua";
