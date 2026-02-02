@@ -13,6 +13,7 @@ import { revalidatePath } from "next/cache";
 import { TokoType } from "@/types/toko";
 import { UserFormInput } from "@/types/user";
 import { ProfilAdminType, SecurityType, UmumType } from "@/types/web.config";
+import { OrderItem } from "@/types/order";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -984,5 +985,94 @@ export const UpdateSecurityConfig = async (data: SecurityType) => {
       messsage: "Kesalahan pada server!",
       success: false,
     };
+  }
+};
+
+// fungsi konfirmasi orderan
+export const confirmOrder = async (orderId: string) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user || session.user.role !== "PENJUAL") {
+      return { error: "Akses ditolak, anda tidak memiliki izin!" };
+    }
+
+    // Ambil Toko milik User
+    const toko = await prisma.toko.findUnique({
+      where: { userId: session.user.id },
+      select: { id: true },
+    });
+    if (!toko) return { error: "Toko tidak ditemukan" };
+
+    // Ambil Order spesifik berdasarkan orderId DAN pastikan milik toko ini
+    const order = await prisma.order.findFirst({
+      where: {
+        id: orderId, // Cari ID pesanan yang diklik
+        tokoId: toko.id, // Pastikan pesanan ini memang milik tokonya si penjual
+        status: "PENDING",
+      },
+    });
+
+    if (!order) return { error: "Pesanan tidak ditemukan atau sudah diproses" };
+
+    const items = order.items as unknown as OrderItem[];
+
+    //  Jalankan Transaksi
+    await prisma.$transaction([
+      prisma.order.update({
+        where: { id: orderId },
+        data: { status: "COMPLETED" },
+      }),
+      // Map setiap item untuk dikurangi stoknya
+      ...items.map((item) =>
+        prisma.product.update({
+          where: { id: item.id },
+          data: { stock: { decrement: item.quantity } },
+        }),
+      ),
+    ]);
+
+    revalidatePath("/dashboard/pesanan");
+    return { success: true };
+  } catch (error) {
+    console.error("LOG_ERROR_CONFIRM:", error);
+    return { error: "Gagal konfirmasi pesanan" };
+  }
+};
+
+// fungsi buat orderan
+export const createOrder = async (data: {
+  tokoId: string;
+  items: OrderItem[];
+  totalPrice: number;
+}) => {
+  const session = await auth();
+
+  if (!session?.user) {
+    return {
+      message: "Akses ditolak, Silahkan Login!",
+      success: false,
+    };
+  }
+
+  try {
+    const newOrder = await prisma.order.create({
+      data: {
+        tokoId: data.tokoId,
+        items: data.items as unknown as Prisma.InputJsonValue, // Prisma akan otomatis handle Json
+        totalPrice: data.totalPrice,
+        status: "PENDING",
+      },
+    });
+
+    revalidatePath("/toko/order");
+    return {
+      message: "Berhasil membuat pesanan",
+      success: true,
+      orderId: newOrder.id,
+    };
+  } catch (error) {
+    console.error("CREATE_ORDER_ERROR:", error);
+    return { success: false, message: "Gagal membuat pesanan" };
   }
 };

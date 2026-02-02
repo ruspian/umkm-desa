@@ -16,6 +16,8 @@ import { HomeProductType } from "@/types/product";
 const DetailProductClient = ({ product }: { product: HomeProductType }) => {
   const addItem = useCart((state) => state.addItem);
 
+  const isOutOfStock = product.stock <= 0;
+
   const handleWhatsAppDirect = () => {
     const message = `Halo ${product?.toko?.namaToko}, saya tertarik dengan produk *${product?.name}* seharga ${formatCurrency(priceWithDiscount)}. Apakah stok masih tersedia?`;
     window.open(
@@ -33,9 +35,10 @@ const DetailProductClient = ({ product }: { product: HomeProductType }) => {
       tokoName: product!.toko?.namaToko as string,
       tokoWa: product!.toko?.noWhatsapp || "",
       quantity: 1,
+      stock: product!.stock,
+      tokoId: product!.toko?.id as string,
     });
     toast.success("Berhasil masuk keranjang!");
-    console.log("addItem", addItem);
   };
 
   const price = product?.price ?? 0;
@@ -85,6 +88,15 @@ const DetailProductClient = ({ product }: { product: HomeProductType }) => {
                 </p>
               )}
             </div>
+
+            <div className="flex items-center gap-2">
+              <span
+                className={`h-2 w-2 rounded-full ${isOutOfStock ? "bg-red-500" : "bg-emerald-500"}`}
+              />
+              <p className="text-xs font-bold text-gray-500">
+                {isOutOfStock ? "Stok Habis" : `Tersisa ${product.stock} unit`}
+              </p>
+            </div>
           </div>
 
           <div className="p-6 bg-gray-50 dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800">
@@ -127,10 +139,21 @@ const DetailProductClient = ({ product }: { product: HomeProductType }) => {
           {/* Tombol Action */}
           <div className="flex flex-col sm:flex-row gap-4">
             <button
+              disabled={isOutOfStock}
               onClick={handleAddToCart}
-              className="flex-1 py-5 bg-gray-900 text-white rounded-[2rem] font-black text-lg hover:bg-orange-600 transition-all flex items-center justify-center gap-3"
+              className={`flex-1 py-5 bg-gray-900  rounded-[2rem] font-black text-lg transition-all flex items-center justify-center gap-3 ${
+                isOutOfStock
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-gray-900 text-white hover:bg-orange-600 shadow-xl"
+              }`}
             >
-              <ShoppingBag size={24} /> Masukkan Keranjang
+              {isOutOfStock ? (
+                "Maaf, Stok Habis"
+              ) : (
+                <>
+                  <ShoppingBag size={24} /> Masukkan Keranjang
+                </>
+              )}
             </button>
 
             <button

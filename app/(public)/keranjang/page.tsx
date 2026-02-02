@@ -1,11 +1,13 @@
 "use client";
 
+import { createOrder } from "@/lib/action";
 import { formatCurrency } from "@/lib/formatRupiah";
 import { useCart } from "@/store/cart";
 import { CartItem } from "@/types/cart";
 import { Trash2, Plus, Minus, MessageCircle, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function KeranjangPage() {
   const { items, updateQuantity, removeItem } = useCart();
@@ -21,8 +23,12 @@ export default function KeranjangPage() {
   );
 
   // Fungsi Kirim WA per Toko
-  const handleCheckoutWA = (tokoName: string, itemsToko: CartItem[]) => {
+  const handleCheckoutWA = async (tokoName: string, itemsToko: CartItem[]) => {
     const rawWa = itemsToko[0].tokoWa;
+    const tokoId = itemsToko[0].tokoId;
+
+    console.log("tokoId", tokoId);
+    console.log("itemsToko", itemsToko[0]);
 
     // Bersihkan nomor dari spasi, strip, atau karakter non-angka
     let formattedWa = rawWa.replace(/\D/g, "");
@@ -32,20 +38,48 @@ export default function KeranjangPage() {
       formattedWa = "62" + formattedWa.slice(1);
     }
 
-    let message = `Halo *${tokoName}*, saya ingin memesan produk berikut dari AsliSini:\n\n`;
+    const total = itemsToko.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0,
+    );
 
-    let total = 0;
-    itemsToko.forEach((item, index) => {
-      const subtotal = item.price * item.quantity;
-      total += subtotal;
-      message += `${index + 1}. *${item.name}* (${item.quantity}x) - ${formatCurrency(subtotal)}\n`;
-    });
+    toast.promise(
+      async () => {
+        // Simpan ke Database
+        const res = await createOrder({
+          tokoId: tokoId,
+          totalPrice: total,
+          items: itemsToko.map((i) => ({
+            id: i.id,
+            name: i.name,
+            quantity: i.quantity,
+            price: i.price,
+          })),
+        });
 
-    message += `\n*Total Pesanan: ${formatCurrency(total)}*\n\nApakah stok tersedia?`;
+        if (!res.success) throw new Error(res.message);
 
-    window.open(
-      `https://wa.me/${formattedWa}?text=${encodeURIComponent(message)}`,
-      "_blank",
+        let message = `Halo *${tokoName}*, saya ingin memesan dari AsliSini:\n\n`;
+        itemsToko.forEach((item, index) => {
+          message += `${index + 1}. *${item.name}* (${item.quantity}x)\n`;
+        });
+        message += `\n*Total Pesanan: ${formatCurrency(total)}*\n\nApakah stok tersedia?`;
+
+        window.open(
+          `https://wa.me/${formattedWa}?text=${encodeURIComponent(message)}`,
+          "_blank",
+        );
+
+        // Hapus item dari keranjang setelah sukses
+        itemsToko.forEach((item) => removeItem(item.id));
+
+        return res;
+      },
+      {
+        loading: "Memproses pesanan...",
+        success: (res) => res.message,
+        error: (err) => err.message,
+      },
     );
   };
 
@@ -76,6 +110,7 @@ export default function KeranjangPage() {
       </h1>
 
       <div className="space-y-12">
+        {/* Daftar Toko */}
         {Object.entries(groupedItems).map(([tokoName, products]) => (
           <div
             key={tokoName}
@@ -131,7 +166,12 @@ export default function KeranjangPage() {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.id, "plus")}
-                          className="p-1 hover:text-orange-600"
+                          className={`p-1 transition-colors ${
+                            item.quantity >= item.stock
+                              ? "text-gray-300 cursor-not-allowed"
+                              : "hover:text-orange-600"
+                          }`}
+                          disabled={item.quantity >= item.stock}
                         >
                           <Plus size={16} />
                         </button>

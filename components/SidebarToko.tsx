@@ -36,7 +36,7 @@ const SidebarToko = ({ menuItems }: { menuItems: MenuItems[] }) => {
       </nav>
 
       {/* Bantuan Button */}
-      <div className="absolute bottom-10 left-6 right-6 space-y-4">
+      <div className="absolute bottom-0 left-6 right-6 space-y-4">
         <div className="p-5 bg-orange-600 rounded-3xl text-white shadow-xl  dark:shadow-none">
           <p className="text-xs font-bold opacity-80 uppercase tracking-widest mb-1">
             Butuh Bantuan?

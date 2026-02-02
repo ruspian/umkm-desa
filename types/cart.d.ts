@@ -6,6 +6,8 @@ export interface CartItem {
   tokoName: string;
   tokoWa: string;
   quantity: number;
+  stock: number;
+  tokoId: string;
 }
 
 export interface CartStore {

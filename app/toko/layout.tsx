@@ -1,5 +1,11 @@
 import SidebarToko from "@/components/SidebarToko";
-import { LayoutDashboard, PackagePlus, Store, ShoppingBag } from "lucide-react";
+import {
+  LayoutDashboard,
+  PackagePlus,
+  Store,
+  ShoppingBag,
+  ShoppingCart,
+} from "lucide-react";
 
 export default function PenjualLayout({
   children,
@@ -26,6 +32,11 @@ export default function PenjualLayout({
       name: "Profil UMKM",
       icon: <Store size={22} />,
       href: "/toko/profile",
+    },
+    {
+      name: "Orderan",
+      icon: <ShoppingCart size={22} />,
+      href: "/toko/order",
     },
   ];
 
