@@ -12,9 +12,12 @@ const SidebarToko = ({ menuItems }: { menuItems: MenuItems[] }) => {
   return (
     <aside className="fixed left-0 top-0 h-full w-72 border-r border-gray-100 dark:border-gray-800 z-50 p-6">
       <div className="mb-10 px-2">
-        <h2 className="text-2xl font-black text-orange-600 tracking-tighter">
+        <Link
+          href="/"
+          className="text-2xl font-black text-orange-600 tracking-tighter"
+        >
           <span className="text-gray-600">Asli</span>Sini
-        </h2>
+        </Link>
         <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] mt-1">
           Seller Center
         </p>

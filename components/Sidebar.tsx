@@ -54,9 +54,9 @@ const Sidebar = () => {
   return (
     <aside className="fixed left-0 top-0 h-full w-64 border-r border-gray-200 dark:border-gray-800 z-50">
       <div className="p-6">
-        <h2 className="text-2xl font-black  tracking-tighter">
+        <Link href="/" className="text-2xl font-black  tracking-tighter">
           Asli<span className="text-orange-500">Sini</span>
-        </h2>
+        </Link>
         <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">
           Admin Panel
         </p>

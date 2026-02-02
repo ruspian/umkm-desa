@@ -4,12 +4,22 @@ import { createOrder } from "@/lib/action";
 import { formatCurrency } from "@/lib/formatRupiah";
 import { useCart } from "@/store/cart";
 import { CartItem } from "@/types/cart";
-import { Trash2, Plus, Minus, MessageCircle, ShoppingBag } from "lucide-react";
+import {
+  Trash2,
+  Plus,
+  Minus,
+  MessageCircle,
+  ShoppingBag,
+  ShoppingCart,
+} from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 
 export default function KeranjangPage() {
+  const { status } = useSession();
+
   const { items, updateQuantity, removeItem } = useCart();
 
   // Kelompokkan barang berdasarkan nama toko
@@ -21,6 +31,29 @@ export default function KeranjangPage() {
     },
     {} as Record<string, CartItem[]>,
   );
+
+  if (status === "unauthenticated") {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-center">
+        <ShoppingCart className="w-12 h-12 mb-4 text-gray-500" />
+        <h1 className="text-3xl font-bold mb-2">Oops!</h1>
+        <p className="text-gray-600 mb-4">
+          Anda belum login, Silakan login terlebih dahulu untuk melihat
+          keranjang.
+        </p>
+
+        <p>
+          Login?{" "}
+          <Link
+            href="/login"
+            className="py-2  text-orange-500 hover:underline rounded-md transition-colors duration-300"
+          >
+            Klik Disini
+          </Link>
+        </p>
+      </div>
+    );
+  }
 
   // Fungsi Kirim WA per Toko
   const handleCheckoutWA = async (tokoName: string, itemsToko: CartItem[]) => {

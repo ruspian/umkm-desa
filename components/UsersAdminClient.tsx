@@ -145,62 +145,84 @@ const UsersAdminClient = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
-              {users.map((user) => (
-                <tr
-                  key={user.id}
-                  className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-all"
-                >
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-orange-100 to-orange-50 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center text-orange-600 font-black text-lg shadow-inner">
-                        {user.name?.charAt(0).toUpperCase() || <User />}
+              {users.length > 0 ? (
+                users.map((user) => (
+                  <tr
+                    key={user.id}
+                    className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-all"
+                  >
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-orange-100 to-orange-50 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center text-orange-600 font-black text-lg shadow-inner">
+                          {user.name?.charAt(0).toUpperCase() || <User />}
+                        </div>
+                        <div>
+                          <p className="font-black text-gray-900 dark:text-white leading-none mb-1">
+                            {user.name}
+                          </p>
+                          <p className="text-sm text-gray-400 font-medium">
+                            {user.email}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-black text-gray-900 dark:text-white leading-none mb-1">
-                          {user.name}
-                        </p>
-                        <p className="text-sm text-gray-400 font-medium">
-                          {user.email}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    {user.role === "ADMIN" && (
-                      <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 text-xs font-black uppercase tracking-tighter border border-purple-100 dark:border-purple-800">
-                        <ShieldCheck size={14} /> Admin
-                      </span>
-                    )}
-                    {user.role === "PENJUAL" && (
-                      <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-xs font-black uppercase tracking-tighter border border-emerald-100 dark:border-emerald-800">
-                        <Store size={14} /> Penjual
-                      </span>
-                    )}
-                    {user.role === "USER" && (
-                      <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-tighter border border-blue-100 dark:border-blue-800">
-                        <User size={14} /> Pembeli
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-8 py-6">
-                    <p className="text-sm font-bold text-gray-500 dark:text-gray-400">
-                      {formatDateDisplay(
-                        user.createdAt?.toLocaleString() || "",
+                    </td>
+                    <td className="px-8 py-6">
+                      {user.role === "ADMIN" && (
+                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 text-xs font-black uppercase tracking-tighter border border-purple-100 dark:border-purple-800">
+                          <ShieldCheck size={14} /> Admin
+                        </span>
                       )}
-                    </p>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <div className="flex items-end justify-end gap-2">
-                      <RoleDropdown userId={user.id as string} />
+                      {user.role === "PENJUAL" && (
+                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-xs font-black uppercase tracking-tighter border border-emerald-100 dark:border-emerald-800">
+                          <Store size={14} /> Penjual
+                        </span>
+                      )}
+                      {user.role === "USER" && (
+                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-tighter border border-blue-100 dark:border-blue-800">
+                          <User size={14} /> Pembeli
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-8 py-6">
+                      <p className="text-sm font-bold text-gray-500 dark:text-gray-400">
+                        {formatDateDisplay(
+                          user.createdAt?.toLocaleString() || "",
+                        )}
+                      </p>
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                      <div className="flex items-end justify-end gap-2">
+                        <RoleDropdown userId={user.id as string} />
 
-                      <ModalDelete
-                        name={user.name as string}
-                        onConfirm={() => handleDelete(user.id as string)}
-                      />
+                        <ModalDelete
+                          name={user.name as string}
+                          onConfirm={() => handleDelete(user.id as string)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  {/* colSpan={7} agar sel ini menempati seluruh lebar tabel */}
+                  <td colSpan={7} className="p-10 text-center">
+                    <div className="flex flex-col items-center justify-center space-y-4">
+                      <div className="w-20 h-20 bg-gray-50 dark:bg-gray-800 rounded-[2rem] flex items-center justify-center text-gray-400">
+                        {/* Kamu bisa tambah ikon search atau box kosong di sini */}
+                        <Search size={32} />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-xl font-black text-gray-900 dark:text-white">
+                          Pengguna tidak ditemukan
+                        </p>
+                        <p className="text-sm text-gray-500 font-medium">
+                          Coba gunakan kata kunci lain atau periksa filter kamu.
+                        </p>
+                      </div>
                     </div>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
           <Pagination

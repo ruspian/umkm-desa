@@ -32,13 +32,15 @@ export default function ProfilDropdown() {
               Toko
             </DropdownItem>
           ) : (
-            <DropdownItem
-              className="gap-2"
-              onClick={() => router.push("/admin")}
-            >
-              <UserCircle className="h-4 w-4" />
-              Admin
-            </DropdownItem>
+            data?.user.role === "ADMIN" && (
+              <DropdownItem
+                className="gap-2"
+                onClick={() => router.push("/admin")}
+              >
+                <UserCircle className="h-4 w-4" />
+                Admin
+              </DropdownItem>
+            )
           )}
           <DropdownItem className="gap-2">
             <CreditCard className="h-4 w-4" />

@@ -1,16 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import ProfilDropdown from "./ProfilDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import CartBadge from "./CartBadge";
+import { useDebounce } from "use-debounce";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { status } = useSession();
+
+  const [debounceSearch] = useDebounce(searchQuery, 500);
+
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const currentSearch = searchParams.get("search") || "";
+
+    if (debounceSearch !== currentSearch) {
+      if (debounceSearch) {
+        params.set("search", debounceSearch);
+      } else {
+        params.delete("search");
+      }
+
+      router.replace(`${pathname}?${params.toString()}`);
+    }
+  }, [debounceSearch, pathname, router, searchParams]);
 
   return (
     <nav className="sticky top-0 z-100 w-full px-4 pt-4">
@@ -36,7 +59,7 @@ const Navbar: React.FC = () => {
           <input
             type="text"
             placeholder="Cari kerajinan atau camilan khas..."
-            className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl py-3 px-12 text-sm font-medium focus:ring-2 focus:ring-orange-500 focus:bg-zinc-100 dark:focus:bg-orange-500 transition-all outline-none"
+            className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl py-3 px-12 text-sm font-medium focus:ring-2 focus:ring-orange-500 focus:bg-zinc-100 dark:focus:bg-orange-100 dark:focus:text-black transition-all outline-none"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
