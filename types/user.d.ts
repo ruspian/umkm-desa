@@ -8,6 +8,8 @@ export type Users = {
   createdAt?: Date | null;
   password?: string | null;
   image?: string | null;
+  alamat?: string | null;
+  whatsapp?: string | null;
 };
 
 export type UserProps = {
@@ -27,4 +29,10 @@ export type UserConfigType = {
   name: string;
   email: string;
   image: string;
+};
+
+export type SettingAlamatUser = {
+  alamat: string;
+  whatsapp: string;
+  id: string;
 };

@@ -41,6 +41,8 @@ model User {
   password      String?   // Wajib untuk Credentials/JWT
   role          Role      @default(USER)
   toko          Toko?
+  alamat        String? @db.Text
+  whatsapp          String?
   
   // Relasi
   accounts      Account[]

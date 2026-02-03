@@ -11,7 +11,7 @@ import { auth } from "./auth";
 import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { TokoType } from "@/types/toko";
-import { UserFormInput, Users } from "@/types/user";
+import { SettingAlamatUser, UserFormInput, Users } from "@/types/user";
 import { ProfilAdminType, SecurityType, UmumType } from "@/types/web.config";
 import { OrderItem } from "@/types/order";
 
@@ -929,7 +929,7 @@ export const UpdateSecurityConfig = async (data: SecurityType) => {
   try {
     const session = await auth();
 
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user) {
       return {
         message: "Akses ditolak, anda tidak memiliki izin!",
         success: false,
@@ -1100,6 +1100,13 @@ export const SaveGeneralSettingUser = async (data: Users) => {
 
     const { name, email, image, id } = data;
 
+    if (session.user.id !== id) {
+      return {
+        message: "Anda tidak memiliki izin untuk mengubah data ini!",
+        success: false,
+      };
+    }
+
     const existingEmail = await prisma.user.findUnique({
       where: {
         email: email as string,
@@ -1142,6 +1149,51 @@ export const SaveGeneralSettingUser = async (data: Users) => {
         };
       }
     }
+
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
+  }
+};
+
+// fungsi tambahkan alamat user dan no hp
+export const SaveAddressSettingUser = async (data: SettingAlamatUser) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return {
+        message: "Akses ditolak, Silahkan Login!",
+        success: false,
+      };
+    }
+
+    const { alamat, whatsapp, id } = data;
+
+    if (session.user.id !== id) {
+      return {
+        message: "Anda tidak memiliki izin untuk mengubah data ini!",
+        success: false,
+      };
+    }
+
+    const saveAddress = await prisma.user.update({
+      where: { id: id },
+      data: {
+        alamat: alamat,
+        whatsapp: whatsapp,
+      },
+    });
+
+    revalidatePath("/setting");
+    return {
+      message: "Berhasil menyimpan data!",
+      success: true,
+      data: saveAddress,
+    };
+  } catch (error) {
+    console.log("GAGAL MEMPERBARUI DATA USER: ", error);
 
     return {
       message: "Kesalahan pada server!",

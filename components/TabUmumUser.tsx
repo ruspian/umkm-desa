@@ -162,7 +162,7 @@ const TabUmumUser = ({ userSetting }: { userSetting: Users }) => {
 
               <button
                 type="submit"
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-[1.5rem] font-black text-sm hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all shadow-xl active:scale-95"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-[1.5rem] font-black text-sm hover:bg-orange-600 dark:hover:bg-orange-600 dark:hover:text-white transition-all shadow-xl active:scale-95 col-span-2"
               >
                 <Save size={18} /> Simpan Perubahan
               </button>

@@ -4,6 +4,8 @@ import { Users } from "@/types/user";
 import { Globe, MapIcon, Shield } from "lucide-react";
 import { useState } from "react";
 import TabUmumUser from "./TabUmumUser";
+import TabAlamatUser from "./TabAlamatUser";
+import TabKeamananUser from "./TabKeamananUser";
 
 const SettingUserClient = ({ user }: { user: Users }) => {
   const [activeTab, setActiveTab] = useState("Umum");
@@ -55,17 +57,19 @@ const SettingUserClient = ({ user }: { user: Users }) => {
         {/* CONTENT AREA */}
         <div className="lg:col-span-3 min-h-150">
           {/*  UMUM */}
-          {activeTab === "Umum" && (
-            <div className="">
-              <TabUmumUser userSetting={user} />
-            </div>
-          )}
+          {activeTab === "Umum" && <TabUmumUser userSetting={user} />}
 
           {activeTab === "Alamat" && (
-            <div className="">
-              <p>ini adalah tab Alamat</p>
-            </div>
+            <TabAlamatUser
+              data={{
+                alamat: user?.alamat as string,
+                whatsapp: user?.whatsapp as string,
+                id: user?.id as string,
+              }}
+            />
           )}
+
+          {activeTab === "Keamanan" && <TabKeamananUser />}
         </div>
       </div>
     </div>
