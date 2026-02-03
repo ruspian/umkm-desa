@@ -4,7 +4,7 @@ export type Users = {
   id: string | null;
   name: string | null;
   email: string | null;
-  role: Role | null;
+  role?: Role | null;
   createdAt?: Date | null;
   password?: string | null;
   image?: string | null;

@@ -7,7 +7,7 @@ import {
   DropdownSeparator,
   DropdownTrigger,
 } from "@/components/ui/basic-dropdown";
-import { CreditCard, LogOut, Settings, User, UserCircle } from "lucide-react";
+import { LogOut, Settings, User, UserCircle } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -42,11 +42,10 @@ export default function ProfilDropdown() {
               </DropdownItem>
             )
           )}
-          <DropdownItem className="gap-2">
-            <CreditCard className="h-4 w-4" />
-            Billing
-          </DropdownItem>
-          <DropdownItem className="gap-2">
+          <DropdownItem
+            className="gap-2"
+            onClick={() => router.push("/setting")}
+          >
             <Settings className="h-4 w-4" />
             Settings
           </DropdownItem>

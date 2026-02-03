@@ -11,7 +11,7 @@ import { auth } from "./auth";
 import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { TokoType } from "@/types/toko";
-import { UserFormInput } from "@/types/user";
+import { UserFormInput, Users } from "@/types/user";
 import { ProfilAdminType, SecurityType, UmumType } from "@/types/web.config";
 import { OrderItem } from "@/types/order";
 
@@ -881,7 +881,7 @@ export const SaveProfilAdminConfig = async (data: ProfilAdminType) => {
       },
     });
 
-    if (existingEmail) {
+    if (existingEmail && existingEmail.id !== id) {
       return {
         message: "Email sudah terdaftar!",
         success: false,
@@ -907,6 +907,15 @@ export const SaveProfilAdminConfig = async (data: ProfilAdminType) => {
     };
   } catch (error) {
     console.log("gagal update profil admin:", error);
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return {
+          message: "Email sudah terdaftar!",
+          success: false,
+        };
+      }
+    }
 
     return {
       message: "Kesalahan pada server!",
@@ -1074,5 +1083,69 @@ export const createOrder = async (data: {
   } catch (error) {
     console.error("CREATE_ORDER_ERROR:", error);
     return { success: false, message: "Gagal membuat pesanan" };
+  }
+};
+
+// fungsi ubah detail user setting
+export const SaveGeneralSettingUser = async (data: Users) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return {
+        message: "Akses ditolak, Silahkan Login!",
+        success: false,
+      };
+    }
+
+    const { name, email, image, id } = data;
+
+    const existingEmail = await prisma.user.findUnique({
+      where: {
+        email: email as string,
+      },
+    });
+
+    // jika email sudah ada dan bukan email user lain maka tolak
+    if (existingEmail && existingEmail.id !== id) {
+      return {
+        message: "Email sudah terdaftar!",
+        success: false,
+      };
+    }
+
+    const saveUser = await prisma.user.update({
+      where: { id: id as string },
+      data: {
+        name: name,
+        email: email,
+        image: image,
+      },
+    });
+
+    revalidatePath("/setting");
+    revalidatePath("/admin/users");
+
+    return {
+      message: "Berhasil menyimpan data!",
+      success: true,
+      data: saveUser,
+    };
+  } catch (error) {
+    console.log("GAGAL UPDATE DATA USER: ", error);
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return {
+          message: "Email sudah terdaftar!",
+          success: false,
+        };
+      }
+    }
+
+    return {
+      message: "Kesalahan pada server!",
+      success: false,
+    };
   }
 };
