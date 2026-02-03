@@ -1,5 +1,5 @@
 import { UpdateSecurityConfig } from "@/lib/action";
-import { AlertTriangle, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 

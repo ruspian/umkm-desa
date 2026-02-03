@@ -5,9 +5,9 @@ import {
   ShieldCheck,
   ShoppingBag,
   Store,
-  Truck,
   SearchX,
   Sparkles,
+  ShoppingCartIcon,
 } from "lucide-react";
 import Image from "next/image";
 import KategoriFilter from "@/components/KategoriFilter";
@@ -213,9 +213,9 @@ const HomeClient = ({
               desc: "Harga lebih kompetitif karena kamu membeli langsung dari pembuatnya.",
             },
             {
-              icon: <Truck size={40} className="text-orange-600" />,
-              title: "Dukungan Logistik",
-              desc: "Berbagai pilihan pengiriman yang aman sampai ke depan rumah kamu.",
+              icon: <ShoppingCartIcon size={40} className="text-orange-600" />,
+              title: "Belanja Mudah",
+              desc: "Belanja secara online dengan mudah dan cepat, tanpa harus keluar rumah.",
             },
           ].map((v, i) => (
             <div

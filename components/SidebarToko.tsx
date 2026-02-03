@@ -3,12 +3,22 @@
 import { LogOut, MessageCircle } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import React from "react";
 type MenuItems = {
   name: string;
   icon: React.ReactNode;
   href: string;
 };
 const SidebarToko = ({ menuItems }: { menuItems: MenuItems[] }) => {
+  const handleClickHubungi = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const message = "Halo Admin AsliSini, saya ingin bertanya tentang produk.";
+    const phone = "6282293308893";
+
+    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${message}`;
+
+    window.open(url, "_blank");
+  };
   return (
     <aside className="fixed left-0 top-0 h-full w-72 border-r border-gray-100 dark:border-gray-800 z-50 p-6">
       <div className="mb-10 px-2">
@@ -47,7 +57,10 @@ const SidebarToko = ({ menuItems }: { menuItems: MenuItems[] }) => {
           <p className="text-sm font-medium mb-3">
             Hubungi Admin AsliSini jika kesulitan.
           </p>
-          <button className="flex items-center gap-2 text-xs bg-white text-orange-600 px-4 py-2 rounded-xl font-black">
+          <button
+            onClick={handleClickHubungi}
+            className="flex items-center gap-2 text-xs bg-white text-orange-600 px-4 py-2 rounded-xl font-black"
+          >
             <MessageCircle size={14} /> Chat Admin
           </button>
         </div>
