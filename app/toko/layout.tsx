@@ -41,11 +41,12 @@ export default function PenjualLayout({
   ];
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar Penjual */}
+    <div className="flex min-h-screen bg-gray-50 dark:bg-black">
       <SidebarToko menuItems={menuItems} />
-      {/* Main Content Area */}
-      <main className="ml-72 w-full">{children}</main>
+
+      <main className="flex-1 ml-0 lg:ml-72 w-full min-h-screen transition-all duration-300">
+        <div className="p-4 md:p-8 lg:p-10 pt-28 lg:pt-10">{children}</div>
+      </main>
     </div>
   );
 }
