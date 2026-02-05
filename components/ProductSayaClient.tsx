@@ -23,7 +23,6 @@ import { DeleteProduct } from "@/lib/action";
 export default function ProductSayaClient({
   products,
   currentPage,
-  totalCount,
   totalPages,
   verified,
 }: ProductProps) {
@@ -227,10 +226,8 @@ export default function ProductSayaClient({
 
       <Pagination
         currentPage={currentPage}
-        totalCount={totalCount}
         totalPages={totalPages}
         handlePageChange={handlePageChange}
-        data="Produk"
       />
     </div>
   );

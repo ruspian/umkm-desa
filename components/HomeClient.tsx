@@ -14,14 +14,16 @@ import KategoriFilter from "@/components/KategoriFilter";
 import { HomeProductType } from "@/types/product";
 import { formatCurrency } from "@/lib/formatRupiah";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ProductPagination from "./ProductPagination";
+import { NavbarUser } from "@/types/navbar";
 
 type HomeTypeProps = {
   featuredProducts: HomeProductType[];
   allProducts: HomeProductType[];
   currentPage: number;
   totalPages: number;
+  user: NavbarUser | null;
 };
 
 const HomeClient = ({
@@ -29,13 +31,29 @@ const HomeClient = ({
   allProducts,
   totalPages,
   currentPage,
+  user,
 }: HomeTypeProps) => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search");
   const currentCategory = searchParams.get("kategori") || "semua";
 
+  const router = useRouter();
+
   const isSearching = !!searchQuery;
   const isFiltering = currentCategory !== "semua";
+
+  const handleDaftarPenjual = () => {
+    if (!user) {
+      router.push("/login");
+    } else if (user.role === "USER") {
+      const message = encodeURIComponent(
+        `Halo Admin AsliSini, saya ${user.name} ingin mendaftar sebagai penjual. Mohon arahannya.`,
+      );
+      window.open(`https://wa.me/6282293308893?text=${message}`, "_blank");
+    } else if (user.role === "PENJUAL") {
+      router.push("/toko");
+    }
+  };
 
   // Reusable Product Card Component (Biar kode gak numpuk)
   const RenderProductCard = ({ p }: { p: HomeProductType }) => {
@@ -103,17 +121,19 @@ const HomeClient = ({
                 Bangga Produk Lokal
               </span>
               <h1 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tighter">
-                Kualitas{" "}
-                <span className="text-orange-500 italic underline">Asli</span>,{" "}
-                <br /> Sampai ke Sini.
+                Produk <span className="text-orange-500 underline">Lokal</span>,{" "}
+                <br /> Kualitas Global.
               </h1>
               <p className="text-gray-300 text-lg font-medium leading-relaxed">
                 Dukung pertumbuhan ekonomi kreatif dengan membeli langsung dari
                 tangan pertama pelaku UMKM terbaik.
               </p>
               <div className="pt-4 flex flex-wrap gap-4">
-                <button className="px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-black transition-all flex items-center gap-2 group">
-                  Mulai Belanja{" "}
+                <button
+                  onClick={handleDaftarPenjual}
+                  className="px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-black transition-all flex items-center gap-2 group"
+                >
+                  Daftar Sebagai Penjual{" "}
                   <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                 </button>
               </div>

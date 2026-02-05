@@ -1,4 +1,5 @@
 import HomeClient from "@/components/HomeClient";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Category, Prisma, StatusProduct } from "@prisma/client";
 
@@ -10,6 +11,9 @@ export default async function HomePage({
   const params = await searchParams;
   const kategori = (params?.kategori as string) || "semua";
   const search = (params?.search as string) || "";
+
+  const session = await auth();
+  const user = session?.user ?? null;
 
   const ITEMS_PER_PAGE = 12;
   const currentPage = Math.max(1, Number(params?.page) || 1);
@@ -66,6 +70,7 @@ export default async function HomePage({
       allProducts={allProducts}
       totalPages={totalPages}
       currentPage={currentPage}
+      user={user}
     />
   );
 }
