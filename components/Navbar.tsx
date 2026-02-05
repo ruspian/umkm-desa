@@ -8,20 +8,8 @@ import { ThemeToggle } from "./ThemeToggle";
 import CartBadge from "./CartBadge";
 import { useDebounce } from "use-debounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Role } from "@prisma/client";
+import { NavbarProps } from "@/types/navbar";
 
-interface NavbarUser {
-  id?: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  role?: Role;
-  tokoId?: string | null;
-}
-
-type NavbarProps = {
-  user: NavbarUser | null;
-};
 const Navbar: React.FC<NavbarProps> = ({ user }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [openSearch, setOpenSearch] = useState(false);
@@ -103,7 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
             {isAuthenticated ? (
               <div className="flex items-center">
                 <CartBadge />
-                <ProfilDropdown />
+                <ProfilDropdown user={user} />
               </div>
             ) : (
               <Link

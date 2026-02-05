@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { auth } from "@/lib/auth";
 
@@ -12,6 +13,7 @@ export default async function PublicLayout({
     <>
       <Navbar user={session?.user ?? null} />
       {children}
+      <Footer />
     </>
   );
 }

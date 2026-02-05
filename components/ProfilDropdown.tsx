@@ -7,14 +7,14 @@ import {
   DropdownSeparator,
   DropdownTrigger,
 } from "@/components/ui/basic-dropdown";
+import { NavbarProps } from "@/types/navbar";
 import { LogOut, Settings, User, UserCircle } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export default function ProfilDropdown() {
-  const session = useSession();
+export default function ProfilDropdown({ user }: NavbarProps) {
+  console.log("user", user);
 
-  const { data } = session;
   const router = useRouter();
   return (
     <div className="flex items-center justify-center min-h-100 p-4">
@@ -23,7 +23,7 @@ export default function ProfilDropdown() {
           <User className="h-4 w-4 md:h-5 md:w-5" />
         </DropdownTrigger>
         <DropdownContent align="end" className="w-56">
-          {data?.user.role === "PENJUAL" ? (
+          {user?.role === "PENJUAL" ? (
             <DropdownItem
               className="gap-2"
               onClick={() => router.push("/toko")}
@@ -32,7 +32,7 @@ export default function ProfilDropdown() {
               Toko
             </DropdownItem>
           ) : (
-            data?.user.role === "ADMIN" && (
+            user?.role === "ADMIN" && (
               <DropdownItem
                 className="gap-2"
                 onClick={() => router.push("/admin")}
