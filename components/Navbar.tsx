@@ -38,7 +38,6 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
 
   return (
     <>
-      {/* Overlay: Muncul hanya di HP saat search terbuka */}
       {openSearch && (
         <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 sm:hidden transition-opacity"

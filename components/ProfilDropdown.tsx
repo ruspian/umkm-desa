@@ -13,8 +13,6 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function ProfilDropdown({ user }: NavbarProps) {
-  console.log("user", user);
-
   const router = useRouter();
   return (
     <div className="flex items-center justify-center min-h-100 p-4">

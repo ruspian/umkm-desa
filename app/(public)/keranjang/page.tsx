@@ -4,6 +4,7 @@ import { createOrder } from "@/lib/action";
 import { formatCurrency } from "@/lib/formatRupiah";
 import { useCart } from "@/store/cart";
 import { CartItem } from "@/types/cart";
+import { NavbarProps } from "@/types/navbar";
 import {
   Trash2,
   Plus,
@@ -12,15 +13,14 @@ import {
   ShoppingBag,
   ShoppingCart,
 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 
-export default function KeranjangPage() {
-  const { status } = useSession();
-
+export default function KeranjangPage({ user }: NavbarProps) {
   const { items, updateQuantity, removeItem } = useCart();
+
+  const isAuth = !!user;
 
   // Kelompokkan barang berdasarkan nama toko
   const groupedItems = items.reduce(
@@ -32,7 +32,7 @@ export default function KeranjangPage() {
     {} as Record<string, CartItem[]>,
   );
 
-  if (status === "unauthenticated") {
+  if (isAuth) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center">
         <ShoppingCart className="w-12 h-12 mb-4 text-gray-500" />
