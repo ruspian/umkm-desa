@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
   // Ambil token dengan secret untuk memastikan token valid & tidak dimanipulasi
   const token = await getToken({
     req,
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.AUTH_SECRET,
   });
 
   const isAuth = !!token;

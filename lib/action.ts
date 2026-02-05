@@ -7,13 +7,15 @@ import { Register } from "@/types/register";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryDelete, CloudinaryUpload } from "@/types/cloudinary";
 import { ProductType } from "@/types/product";
-import { auth } from "./auth";
+import { auth, signIn } from "./auth";
 import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { TokoType } from "@/types/toko";
 import { SettingAlamatUser, UserFormInput, Users } from "@/types/user";
 import { ProfilAdminType, SecurityType, UmumType } from "@/types/web.config";
 import { OrderItem } from "@/types/order";
+import { loginSchema, productSchema, registerSchema, tokoSchema } from "./zod";
+import { AuthError } from "next-auth";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -32,21 +34,15 @@ const checkTokoVerified = async (userId: string) => {
 
 // fungsi register akun
 export const RegisterAction = async (data: Register) => {
-  const { username, email, password } = data;
+  const validatedFields = registerSchema.safeParse(data);
 
-  if (!username || !email || !password) {
+  if (!validatedFields.success) {
     return {
-      error: "Email, username, dan password harus diisi!",
       success: false,
+      message: validatedFields.error.issues[0].message,
     };
   }
-
-  if (password.length < 8) {
-    return {
-      message: "Password minimal 8 karakter!",
-      success: false,
-    };
-  }
+  const { username, email, password } = validatedFields.data;
 
   try {
     const existingUser = await prisma.user.findUnique({
@@ -94,6 +90,50 @@ export const RegisterAction = async (data: Register) => {
       message: "Kesalahan pada server!",
       success: false,
     };
+  }
+};
+
+// fungsi login akun
+export const LoginAction = async (data: unknown) => {
+  // Validasi Input pake Zod
+  const validatedFields = loginSchema.safeParse(data);
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      message: validatedFields.error.issues[0].message,
+    };
+  }
+
+  const { email, password } = validatedFields.data;
+
+  try {
+    // Login Auth.js
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/", // arahkan kembali ke halaman utama
+    });
+
+    revalidatePath("/", "layout");
+
+    return { success: true, message: "Login Berhasil!" };
+  } catch (error) {
+    // Handle Error dari Auth.js
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return {
+            success: false,
+            message: "Email atau Password salah!",
+          };
+        default:
+          return { success: false, message: "Ada masalah pada server login." };
+      }
+    }
+
+    // lempar error ke client
+    throw error;
   }
 };
 
@@ -180,8 +220,17 @@ export const AddProduct = async (data: ProductType) => {
   }
 
   try {
+    const validateFields = productSchema.safeParse(data);
+
+    if (!validateFields.success) {
+      return {
+        message: validateFields.error.issues[0].message,
+        success: false,
+      };
+    }
+
     const { nama, description, images, stock, discount, price, category } =
-      data;
+      validateFields.data;
 
     const tokoId = await checkTokoVerified(userId as string);
 
@@ -194,13 +243,6 @@ export const AddProduct = async (data: ProductType) => {
 
       return {
         message: "Toko belum terverifikasi, Hubungi Admin!",
-        success: false,
-      };
-    }
-
-    if (!nama || !images || !price || !stock) {
-      return {
-        message: "Data belum lengkap!",
         success: false,
       };
     }
@@ -220,12 +262,12 @@ export const AddProduct = async (data: ProductType) => {
     const newProduct = await prisma.product.create({
       data: {
         name: nama,
-        description,
+        description: description as string,
         slug,
         images,
-        stock: Number(stock),
-        discount: Number(discount),
-        price: Number(price),
+        stock,
+        discount,
+        price,
         category: category as Category,
         tokoId: tokoId as string,
         status: "Pending",
@@ -437,11 +479,17 @@ export const CreateToko = async (data: TokoType) => {
   }
 
   try {
-    const { namaToko, deskripsi, logo, alamat, noWhatsapp } = data;
+    const validateFields = tokoSchema.safeParse(data);
 
-    if (!namaToko || !deskripsi || !logo || !alamat || !noWhatsapp) {
-      return { message: "Data belum lengkap!", success: false };
+    if (!validateFields.success) {
+      return {
+        message: validateFields.error.issues[0].message,
+        success: false,
+      };
     }
+
+    const { namaToko, deskripsi, logo, alamat, noWhatsapp } =
+      validateFields.data;
 
     //  Cek apakah user SUDAH punya toko sebelumnya
     const existingToko = await prisma.toko.findUnique({

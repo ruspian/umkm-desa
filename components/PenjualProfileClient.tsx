@@ -20,6 +20,7 @@ import {
 import Image from "next/image";
 import { CreateToko } from "@/lib/action";
 import { useRouter } from "next/navigation";
+import { tokoSchema } from "@/lib/zod";
 
 export default function PenjualProfileClient({
   dataToko,
@@ -93,19 +94,18 @@ export default function PenjualProfileClient({
   const onSaveProfile = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (
-      !formData.namaToko ||
-      !formData.deskripsi ||
-      !formData.alamat ||
-      !formData.noWhatsapp
-    ) {
-      toast.error("Lengkapi semua data profil toko terlebih dahulu!");
+    const validate = tokoSchema.safeParse(formData);
+
+    if (!validate.success) {
+      toast.error(validate.error.message);
       return;
     }
 
+    const cleanData = validate.data;
+
     toast.promise(
       async () => {
-        const result = await CreateToko(formData);
+        const result = await CreateToko(cleanData);
 
         if (!result.success) {
           throw new Error(result.message || "Gagal menyimpan profil toko");

@@ -3,19 +3,30 @@
 import React, { useEffect, useState } from "react";
 import { Search, LogIn } from "lucide-react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import ProfilDropdown from "./ProfilDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import CartBadge from "./CartBadge";
 import { useDebounce } from "use-debounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Role } from "@prisma/client";
 
-const Navbar: React.FC = () => {
+interface NavbarUser {
+  id?: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role?: Role;
+  tokoId?: string | null;
+}
+
+type NavbarProps = {
+  user: NavbarUser | null;
+};
+const Navbar: React.FC<NavbarProps> = ({ user }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [openSearch, setOpenSearch] = useState(false);
 
-  const { status } = useSession();
-
+  const isAuthenticated = !!user;
   const [debounceSearch] = useDebounce(searchQuery, 500);
 
   const pathname = usePathname();
@@ -89,7 +100,7 @@ const Navbar: React.FC = () => {
 
             <ThemeToggle />
 
-            {status === "authenticated" ? (
+            {isAuthenticated ? (
               <div className="flex items-center">
                 <CartBadge />
                 <ProfilDropdown />

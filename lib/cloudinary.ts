@@ -29,7 +29,14 @@ export const uploadToCloudinarySigned = async ({
     formData.append("api_key", signData.apiKey as string);
     formData.append("timestamp", signData.timestamp.toString());
     formData.append("signature", signData.signature);
-    formData.append("folder", folder);
+    formData.append("folder", folder || "umkm");
+
+    console.log("DATA KIRIMAN:", {
+      apiKey: signData.apiKey,
+      timestamp: signData.timestamp,
+      signature: signData.signature,
+      folder: folder || "umkm",
+    });
 
     // URL API Cloudinary => resource_type: image/raw/auto
     const uploadUrl = `https://api.cloudinary.com/v1_1/${signData.cloudName}/${resourceType}/upload`;

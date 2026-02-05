@@ -5,6 +5,7 @@ import {
   deleteFromCloudinary,
   uploadToCloudinarySigned,
 } from "@/lib/cloudinary";
+import { productSchema } from "@/lib/zod";
 import { KategoriIcon, KategoriType } from "@/types/category";
 import { ProductType } from "@/types/product";
 import {
@@ -50,31 +51,39 @@ export default function TambahPoductClient({
   };
 
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    toast.promise(
-      async () => {
-        const url = await uploadToCloudinarySigned({
-          file: file[0],
-          folder: "umkm",
-          resourceType: "image",
-        });
+    // Cek ukuran file
+    if (file.size > 1024 * 1024) {
+      // 1MB limit
+      return toast.error("File kegedean, Maksimal 1MB ya.");
+    }
 
-        setFormData((prev) => ({
-          ...prev,
-          images: url,
-        }));
-      },
-      {
-        loading: "Tunggu sebentar...",
-        success: "Foto berhasil diupload!",
-        error: (err) => {
-          return err.message;
-        },
-      },
-    );
+    const uploadProcess = async () => {
+      // Proses upload ke Cloudinary
+      const url = await uploadToCloudinarySigned({
+        file: file,
+        folder: "umkm",
+        resourceType: "image",
+      });
+
+      if (!url) throw new Error("Gagal mendapatkan URL gambar");
+
+      //  update state setelah URL benar-benar dapet
+      setFormData((prev) => ({
+        ...prev,
+        images: url,
+      }));
+
+      return url;
+    };
+
+    toast.promise(uploadProcess(), {
+      loading: "Mengunggah foto...",
+      success: "Mantap! Upload berhasil.",
+      error: (err) => err.message,
+    });
   };
 
   const handleDeleteImage = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -105,29 +114,32 @@ export default function TambahPoductClient({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (
-      !formData.images ||
-      !formData.nama ||
-      !formData.price ||
-      !formData.stock
-    ) {
-      toast.warning("Data belum lengkap!");
+    const validation = productSchema.safeParse(formData);
+
+    if (!validation.success) {
+      toast.error(validation.error.issues[0].message);
       return;
     }
+
+    const cleanData = validation.data;
+
     toast.promise(
       async () => {
         setIsSubmitting(true);
+        try {
+          const result = await AddProduct(cleanData as ProductType);
 
-        const result = await AddProduct(formData);
+          if (!result.success) {
+            setIsSubmitting(false);
+            throw new Error(result.message || "Terjadi kesalahan!");
+          }
 
-        if (!result.success) {
+          router.push("/toko/produk-saya");
+
+          return result;
+        } finally {
           setIsSubmitting(false);
-          throw new Error(result.message || "Terjadi kesalahan!");
         }
-
-        router.push("/toko/produk-saya");
-        setIsSubmitting(false);
-        return result;
       },
       {
         loading: "Sedang menambahkan produk...",

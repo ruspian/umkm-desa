@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { LoginAction } from "@/lib/action";
+import { loginSchema } from "@/lib/zod";
 
 interface ConfettiParticle {
   id: number;
@@ -25,39 +26,40 @@ export default function GamifiedLoginCard() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [success, setSuccess] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [isPending, startTransition] = React.useTransition();
   const [error, setError] = React.useState("");
   const [particles, setParticles] = React.useState<ConfettiParticle[]>([]);
 
   const router = useRouter();
 
   const handleLogin = async () => {
-    if (!email || !password || loading) return;
+    // Validasi
+    const validation = loginSchema.safeParse({ email, password });
 
-    try {
-      setLoading(true);
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
+      return;
+    }
+
+    // Gunakan startTransition agar Next.js tau ada proses async
+    startTransition(async () => {
       setError("");
 
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+      const result = await LoginAction({ email, password });
 
-      if (result?.error) {
-        setError("Email atau password salah!");
-        setLoading(false);
+      if (result?.success === false) {
+        setError(result.message);
         return;
       }
 
-      //  Jika sukses, baru jalankan animasi
+      // Animasi Confetti
       const newParticles: ConfettiParticle[] = Array.from({ length: 30 }).map(
         (_, i) => ({
           id: Date.now() + i,
           x: 0,
           y: 0,
-          targetX: (Math.random() - 0.5) * 150,
-          targetY: -Math.random() * 200,
+          targetX: (Math.random() - 0.5) * 200,
+          targetY: -Math.random() * 250,
           rotate: Math.random() * 360,
           color: colors[Math.floor(Math.random() * colors.length)],
         }),
@@ -66,15 +68,11 @@ export default function GamifiedLoginCard() {
       setParticles(newParticles);
       setSuccess(true);
 
-      // Beri jeda sedikit agar user bisa menikmati animasi sebelum pindah halaman
       setTimeout(() => {
-        router.push("/");
+        window.location.href = "/";
         router.refresh();
-      }, 800);
-    } catch (error) {
-      console.error("Login Error:", error);
-      setError("Terjadi kesalahan koneksi.");
-    }
+      }, 1000);
+    });
   };
 
   return (
@@ -153,6 +151,7 @@ export default function GamifiedLoginCard() {
         <Button
           className="w-full mt-4 hover:scale-110 transition-transform duration-200"
           onClick={handleLogin}
+          disabled={isPending}
         >
           {success ? "Berhasil Masuk!" : "Masuk"}
         </Button>
