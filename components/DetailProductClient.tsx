@@ -12,8 +12,14 @@ import { useCart } from "@/store/cart";
 import { formatCurrency } from "@/lib/formatRupiah";
 import { toast } from "sonner";
 import { HomeProductType } from "@/types/product";
+import { NavbarUser } from "@/types/navbar";
 
-const DetailProductClient = ({ product }: { product: HomeProductType }) => {
+type DetailProductProps = {
+  product: HomeProductType;
+  user: NavbarUser | null;
+};
+
+const DetailProductClient = ({ product, user }: DetailProductProps) => {
   const addItem = useCart((state) => state.addItem);
 
   const isOutOfStock = product.stock <= 0;
@@ -110,7 +116,7 @@ const DetailProductClient = ({ product }: { product: HomeProductType }) => {
 
           {/* Info Penjual */}
           <Link
-            href={`/seller/${product?.toko?.id}`}
+            href={`/seller/${product?.toko?.slug}`}
             className="flex items-center justify-between p-6 border-2 border-gray-100 dark:border-gray-800 rounded-[2rem] hover:border-orange-500 transition-all group"
           >
             <div className="flex items-center gap-4">
@@ -142,13 +148,15 @@ const DetailProductClient = ({ product }: { product: HomeProductType }) => {
               disabled={isOutOfStock}
               onClick={handleAddToCart}
               className={`flex-1 py-5 bg-gray-900  rounded-[2rem] font-black text-lg transition-all flex items-center justify-center gap-3 ${
-                isOutOfStock
+                isOutOfStock || !user
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                   : "bg-gray-900 text-white hover:bg-orange-600 shadow-xl"
               }`}
             >
               {isOutOfStock ? (
                 "Maaf, Stok Habis"
+              ) : !user ? (
+                "Anda Belum Login"
               ) : (
                 <>
                   <ShoppingBag size={24} /> Masukkan Keranjang

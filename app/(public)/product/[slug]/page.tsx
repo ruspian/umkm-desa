@@ -1,7 +1,7 @@
 import DetailProductClient from "@/components/DetailProductClient";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 const DetailProduct = async ({
   params,
@@ -12,9 +12,7 @@ const DetailProduct = async ({
 
   const { slug } = await params;
 
-  if (!session?.user) {
-    redirect("/");
-  }
+  const user = session?.user ?? null;
 
   const product = await prisma.product.findUnique({
     where: { slug: slug },
@@ -27,6 +25,7 @@ const DetailProduct = async ({
           isVerified: true,
           alamat: true,
           noWhatsapp: true,
+          slug: true,
         },
       },
     },
@@ -36,7 +35,7 @@ const DetailProduct = async ({
     return notFound();
   }
 
-  return <DetailProductClient product={product} />;
+  return <DetailProductClient product={product} user={user} />;
 };
 
 export default DetailProduct;
