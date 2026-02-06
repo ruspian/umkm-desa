@@ -75,5 +75,6 @@ export type HomeProductType = {
     noWhatsapp?: string | null;
     logo?: string | null;
     alamat?: string | null;
+    slug?: string | null;
   } | null;
 };
