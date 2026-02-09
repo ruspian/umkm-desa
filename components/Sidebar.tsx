@@ -73,7 +73,7 @@ const Sidebar = () => {
         className={`fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 z-50 transition-transform duration-300 ease-in-out 
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
-        {/* Tombol Tutup di dalam Sidebar (Mobile Only) */}
+        {/* Tombol Tutup di dalam Sidebar */}
         <button
           onClick={() => setIsOpen(false)}
           className="lg:hidden absolute top-6 right-6 p-2 text-gray-400 hover:text-orange-500"

@@ -25,7 +25,6 @@ export default async function MaintenancePage() {
           </div>
         </div>
 
-        {/* Konten Teks */}
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-gray-900 dark:text-white">
             Web Sedang <span className="text-orange-600">Maintnance!</span>
@@ -35,7 +34,6 @@ export default async function MaintenancePage() {
           </p>
         </div>
 
-        {/* Badge Estimasi */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-900 rounded-full border border-gray-200 dark:border-gray-800">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
           <span className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-widest">

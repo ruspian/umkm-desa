@@ -54,7 +54,6 @@ export default function ModaltambahUser() {
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="bg-white dark:bg-gray-900 w-full max-w-lg rounded-[3rem] p-8 shadow-2xl relative overflow-hidden">
-            {/* Header */}
             <div className="flex justify-between items-center mb-8">
               <div>
                 <h2 className="text-2xl font-black">
@@ -73,7 +72,6 @@ export default function ModaltambahUser() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Input Nama */}
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-2">
                   Nama Lengkap
@@ -93,7 +91,6 @@ export default function ModaltambahUser() {
                 </div>
               </div>
 
-              {/* Input Email */}
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-2">
                   Email Address
@@ -113,7 +110,6 @@ export default function ModaltambahUser() {
                 </div>
               </div>
 
-              {/* Pilih Role */}
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-2">
                   Akses Role
@@ -135,7 +131,6 @@ export default function ModaltambahUser() {
                 </div>
               </div>
 
-              {/* Password Default */}
               <div className="p-4 bg-orange-50 dark:bg-orange-900/10 rounded-2xl border border-orange-100 dark:border-orange-900/30">
                 <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-1">
                   Catatan

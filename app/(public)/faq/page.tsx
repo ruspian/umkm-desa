@@ -36,7 +36,6 @@ export default function PusatBantuanPage() {
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-16">
-      {/* Header */}
       <div className="text-center space-y-4 mb-20">
         <div className="inline-flex p-4 bg-orange-100 dark:bg-orange-950/30 text-orange-600 rounded-[2rem] mb-4">
           <HelpCircle size={40} />
@@ -49,7 +48,6 @@ export default function PusatBantuanPage() {
         </p>
       </div>
 
-      {/* FAQ Accordion */}
       <div className="space-y-12">
         {faqs.map((group, groupIdx) => (
           <div key={groupIdx} className="space-y-4">
@@ -62,7 +60,7 @@ export default function PusatBantuanPage() {
 
             <div className="space-y-4">
               {group.questions.map((item, qIdx) => {
-                const globalIdx = groupIdx * 10 + qIdx; // Unique ID sederhana
+                const globalIdx = groupIdx * 10 + qIdx;
                 const isOpen = openIndex === globalIdx;
 
                 return (

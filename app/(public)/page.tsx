@@ -49,7 +49,7 @@ export default async function HomePage({
   const totalItems = await prisma.product.count({ where: whereClause });
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  // Query Rekomendasi Hanya muncul jika tidak sedang mencari spesifik
+  // Rekomendasi Hanya muncul jika tidak sedang mencari spesifik
   const featuredProducts = await prisma.product.findMany({
     where: { ...baseWhere },
     include: { toko: { select: { namaToko: true, logo: true } } },
@@ -57,7 +57,7 @@ export default async function HomePage({
     take: ITEMS_PER_PAGE,
   });
 
-  // Query Semua Produk + Filter Kategori + Search
+  //  Semua Produk + Filter Kategori + Search
   const allProducts = await prisma.product.findMany({
     where: whereClause,
     orderBy: { updatedAt: "desc" },

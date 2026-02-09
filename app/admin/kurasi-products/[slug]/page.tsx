@@ -23,7 +23,6 @@ export default async function DetailKurasiProdukPage({
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-8">
-      {/* Header Navigasi */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <Link
@@ -41,7 +40,6 @@ export default async function DetailKurasiProdukPage({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Sisi Kiri: Foto Produk */}
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-4 border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden group">
             <div className="aspect-square rounded-[2rem] overflow-hidden bg-gray-50 relative">
@@ -58,7 +56,7 @@ export default async function DetailKurasiProdukPage({
                   <Package size={64} />
                 </div>
               )}
-              {/* Badge Status Floating */}
+
               <div className="absolute top-6 left-6">
                 <span
                   className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg ${
@@ -76,7 +74,6 @@ export default async function DetailKurasiProdukPage({
           </div>
         </div>
 
-        {/* Sisi Kanan: Detail Informasi */}
         <div className="lg:col-span-7 space-y-6">
           <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
             <div>
@@ -122,7 +119,6 @@ export default async function DetailKurasiProdukPage({
             </div>
           </div>
 
-          {/* Info Toko Pengirim */}
           <div className="bg-orange-50 dark:bg-orange-900/10 rounded-[2.5rem] p-6 border border-orange-100 dark:border-orange-900/20 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-sm text-orange-600">

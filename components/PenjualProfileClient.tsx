@@ -124,7 +124,6 @@ export default function PenjualProfileClient({
 
   return (
     <div className="p-4 md:p-10 max-w-300 mx-auto space-y-10 animate-in fade-in duration-700">
-      {/* HEADER & ACTIONS */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black tracking-tight">
@@ -144,7 +143,6 @@ export default function PenjualProfileClient({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Branding & Identitas */}
         <div className="lg:col-span-2 space-y-8">
           <div className="rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
@@ -189,7 +187,6 @@ export default function PenjualProfileClient({
             </div>
           </div>
 
-          {/* Kontak & Lokasi */}
           <div className="rounded-[2.5rem] p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm space-y-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
               <MapPin className="text-orange-600" size={24} />{" "}
@@ -237,9 +234,7 @@ export default function PenjualProfileClient({
           </div>
         </div>
 
-        {/* logo dan verifikasi toko */}
         <div className="space-y-8">
-          {/* Logo Toko */}
           <div className="rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col items-center text-center">
             {formData.logo ? (
               <div className="relative w-40 h-40 rounded-[2.5rem] overflow-hidden group border-4 border-gray-50 dark:border-gray-800 shadow-xl">
@@ -251,7 +246,6 @@ export default function PenjualProfileClient({
                   unoptimized
                 />
 
-                {/* Overlay untuk Hapus */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                   <button
                     type="button"
@@ -285,7 +279,6 @@ export default function PenjualProfileClient({
             </p>
           </div>
 
-          {/* Status Verifikasi */}
           {verified ? (
             <div className="bg-emerald-600 rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-2xl shadow-emerald-200">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16" />

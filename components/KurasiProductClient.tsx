@@ -26,7 +26,6 @@ const KurasiProductClient = ({
 
   return (
     <div className="p-4 md:p-10 max-w-400 mx-auto space-y-10">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
@@ -45,7 +44,6 @@ const KurasiProductClient = ({
         </div>
       </div>
 
-      {/* Grid Produk */}
       {pendingProducts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-gray-900 rounded-[3rem] border-2 border-dashed border-gray-100 dark:border-gray-800">
           <ShoppingBag size={64} className="text-gray-200 mb-4" />
@@ -60,7 +58,6 @@ const KurasiProductClient = ({
               key={product.id}
               className="group bg-white dark:bg-gray-900 rounded-[2.5rem] overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col"
             >
-              {/* Image Preview */}
               <div className="relative h-64 w-full bg-gray-100 overflow-hidden">
                 <Image
                   src={product.images}
@@ -75,7 +72,6 @@ const KurasiProductClient = ({
                 </div>
               </div>
 
-              {/* Product Info */}
               <div className="p-8 flex-1 space-y-4">
                 <div className="flex justify-between items-start">
                   <div>
@@ -113,7 +109,6 @@ const KurasiProductClient = ({
                 </p>
               </div>
 
-              {/* Action Buttons */}
               <div className="p-6 pt-0 grid grid-cols-2 gap-4">
                 <button
                   onClick={() => handleVerify(product.id, "Rejected")}

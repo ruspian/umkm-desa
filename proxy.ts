@@ -38,9 +38,7 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  // Jika maintenance dan bukan halaman maintenance dan bukan api dan bukan file statis, kembalikan ke halaman maintenance
   if (isMaintenanceMode && !isMaintenancePage && !isApiRoute && !isStaticFile) {
-    // Kalo Admin bisa akses saat maintenance
     if (!isAdmin) {
       return NextResponse.redirect(new URL("/maintenance", req.url));
     }
@@ -49,20 +47,17 @@ export async function proxy(req: NextRequest) {
   const isAuthPage =
     pathname.startsWith("/login") || pathname.startsWith("/register");
 
-  // prootksi halaman auth
   if (isAuthPage) {
     if (isAuth) return NextResponse.redirect(new URL("/", req.url));
     return NextResponse.next();
   }
 
-  // proiteksi halaman admin
   if (pathname.startsWith("/admin")) {
     if (!token) return NextResponse.redirect(new URL("/login", req.url));
 
     if (!isAdmin) return NextResponse.rewrite(new URL("/403", req.url));
   }
 
-  // proteksi halaman toko
   if (pathname.startsWith("/toko")) {
     if (!token) return NextResponse.redirect(new URL("/login", req.url));
     if (token.role !== "PENJUAL" && !isAdmin) {
@@ -70,7 +65,6 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  // proteksi halaman user
   if (pathname.startsWith("/setting") && !isAuth) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
@@ -78,7 +72,6 @@ export async function proxy(req: NextRequest) {
   return NextResponse.next();
 }
 
-// global matcher
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

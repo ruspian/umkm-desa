@@ -55,7 +55,6 @@ export default function KeranjangPage({ user }: NavbarProps) {
     );
   }
 
-  // Fungsi Kirim WA per Toko
   const handleCheckoutWA = async (tokoName: string, itemsToko: CartItem[]) => {
     const rawWa = itemsToko[0].tokoWa;
     const tokoId = itemsToko[0].tokoId;
@@ -66,7 +65,6 @@ export default function KeranjangPage({ user }: NavbarProps) {
     // Bersihkan nomor dari spasi, strip, atau karakter non-angka
     let formattedWa = rawWa.replace(/\D/g, "");
 
-    // Ubah awalan 0 menjadi 62
     if (formattedWa.startsWith("0")) {
       formattedWa = "62" + formattedWa.slice(1);
     }
@@ -78,7 +76,6 @@ export default function KeranjangPage({ user }: NavbarProps) {
 
     toast.promise(
       async () => {
-        // Simpan ke Database
         const res = await createOrder({
           tokoId: tokoId,
           totalPrice: total,
@@ -143,13 +140,11 @@ export default function KeranjangPage({ user }: NavbarProps) {
       </h1>
 
       <div className="space-y-12">
-        {/* Daftar Toko */}
         {Object.entries(groupedItems).map(([tokoName, products]) => (
           <div
             key={tokoName}
             className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 p-8 shadow-sm"
           >
-            {/* Header Toko */}
             <div className="flex items-center justify-between mb-8 border-b border-gray-50 dark:border-gray-800 pb-5">
               <div>
                 <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest">
@@ -165,7 +160,6 @@ export default function KeranjangPage({ user }: NavbarProps) {
               </button>
             </div>
 
-            {/* Daftar Produk di Toko Ini */}
             <div className="space-y-6">
               {products.map((item) => (
                 <div key={item.id} className="flex items-center gap-6">

@@ -70,7 +70,6 @@ const ProductAdminClient = ({
   };
   return (
     <div className="p-4 md:p-10 max-w-400 mx-auto space-y-10">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
@@ -82,7 +81,6 @@ const ProductAdminClient = ({
         </div>
       </div>
 
-      {/* Toolbar: Search & Filter */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-gray-900 p-4 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-sm">
         <div className="relative w-full group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-orange-600 transition-colors w-5 h-5" />
@@ -96,7 +94,6 @@ const ProductAdminClient = ({
         </div>
       </div>
 
-      {/* Modern Table Container */}
       <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -193,11 +190,9 @@ const ProductAdminClient = ({
                 ))
               ) : (
                 <tr>
-                  {/* colSpan={7} agar sel ini menempati seluruh lebar tabel */}
                   <td colSpan={7} className="p-10 text-center">
                     <div className="flex flex-col items-center justify-center space-y-4">
                       <div className="w-20 h-20 bg-gray-50 dark:bg-gray-800 rounded-[2rem] flex items-center justify-center text-gray-400">
-                        {/* Kamu bisa tambah ikon search atau box kosong di sini */}
                         <Search size={32} />
                       </div>
                       <div className="space-y-1">

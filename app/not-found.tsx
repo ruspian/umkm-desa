@@ -4,7 +4,6 @@ import { Home, Ghost } from "lucide-react";
 export default function NotFound() {
   return (
     <main className="min-h-screen w-full flex items-center justify-center px-6 py-24 bg-white dark:bg-gray-950 relative overflow-hidden">
-      {/* Background  */}
       <div className="absolute top-[-10%] left-[-10%] w-1/2 h-1/2 bg-orange-600/5 blur-[120px] rounded-full z-0" />
       <div className="absolute bottom-[-10%] right-[-10%] w-1/2 h-1/2 bg-orange-600/10 blur-[120px] rounded-full z-0" />
 
@@ -38,7 +37,6 @@ export default function NotFound() {
           </p>
         </div>
 
-        {/* Tombol Aksi  */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
           <Link
             href="/"
@@ -52,7 +50,6 @@ export default function NotFound() {
           </Link>
         </div>
 
-        {/* footer */}
         <div className="pt-12 flex items-center justify-center gap-3 opacity-30">
           <div className="h-px w-8 bg-gray-400" />
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-500">

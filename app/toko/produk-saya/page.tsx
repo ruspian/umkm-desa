@@ -71,7 +71,6 @@ export default async function MyProductsPage({
 
   const totalPages = Math.ceil(totalCount / limit);
 
-  // Kirim totalCount juga ke Client supaya bisa bikin tombol 'Next/Prev'
   return (
     <ProductSayaClient
       products={formatedProducts}

@@ -64,7 +64,6 @@ const DetailProductClient = ({ product, user }: DetailProductProps) => {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Gambar Produk */}
         <div className="space-y-4">
           <div className="aspect-square rounded-[3rem] overflow-hidden bg-gray-100 border border-gray-100 dark:border-gray-800 shadow-2xl">
             <Image
@@ -77,7 +76,6 @@ const DetailProductClient = ({ product, user }: DetailProductProps) => {
           </div>
         </div>
 
-        {/*  Info Produk */}
         <div className="space-y-8">
           <div className="space-y-2">
             <h1 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">
@@ -114,7 +112,6 @@ const DetailProductClient = ({ product, user }: DetailProductProps) => {
             </p>
           </div>
 
-          {/* Info Penjual */}
           <Link
             href={`/seller/${product?.toko?.slug}`}
             className="flex items-center justify-between p-6 border-2 border-gray-100 dark:border-gray-800 rounded-[2rem] hover:border-orange-500 transition-all group"
@@ -142,7 +139,6 @@ const DetailProductClient = ({ product, user }: DetailProductProps) => {
             <ChevronRight className="text-gray-300 group-hover:text-orange-600 group-hover:translate-x-1 transition-all" />
           </Link>
 
-          {/* Tombol Action */}
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               disabled={isOutOfStock}

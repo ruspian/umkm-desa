@@ -20,7 +20,6 @@ export default async function DetailKurasiPage({
 
   return (
     <div className="p-8 max-w-5xl mx-auto space-y-8">
-      {/* Header & Navigasi */}
       <div className="flex items-center justify-between">
         <div>
           <Link
@@ -32,13 +31,11 @@ export default async function DetailKurasiPage({
           <h1 className="text-3xl font-black mt-2">Detail Tinjauan Toko</h1>
         </div>
         <div className="flex gap-3">
-          {/* Komponen Client untuk Button Action */}
           <VerifyButton tokoId={toko.id} isVerified={toko.isVerified} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Kolom Kiri: Profil Utama */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
             <div className="flex flex-col md:flex-row gap-6 items-start">
@@ -75,7 +72,6 @@ export default async function DetailKurasiPage({
             </div>
           </div>
 
-          {/* Informasi Detail */}
           <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex gap-4">
               <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl h-fit">
@@ -106,7 +102,6 @@ export default async function DetailKurasiPage({
           </div>
         </div>
 
-        {/* Kolom Kanan: Data Pemilik */}
         <div className="space-y-6">
           <div className="bg-gray-900 text-white rounded-[2.5rem] p-8 shadow-xl relative overflow-hidden">
             <div className="relative z-10 space-y-6">

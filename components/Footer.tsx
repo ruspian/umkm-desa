@@ -33,11 +33,9 @@ const Footer = () => {
   return (
     <footer className="w-full px-4 pb-8 mt-20">
       <div className="max-w-7xl mx-auto bg-gray-900 dark:bg-zinc-900 rounded-[3rem] p-10 md:p-16 overflow-hidden relative">
-        {/*  Cahaya  Background */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/20 blur-[100px] z-0" />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
-          {/* Branding */}
           <div className="space-y-6 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 group">
               <div className="w-10 h-10 bg-orange-600 rounded-2xl flex items-center justify-center text-white rotate-3 group-hover:rotate-0 transition-all shadow-lg shadow-orange-600/30">
@@ -63,7 +61,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/*  Bantuan */}
           <div className="space-y-6">
             <h4 className="text-white font-black uppercase tracking-widest text-xs">
               Dukungan
@@ -82,7 +79,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/*  Kontak */}
           <div className="space-y-6">
             <h4 className="text-white font-black uppercase tracking-widest text-xs">
               Kontak Kami

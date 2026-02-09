@@ -53,7 +53,6 @@ export default async function AdminDashboard() {
 
   return (
     <div className="p-4 md:p-10 space-y-10 max-w-400 mx-auto">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
@@ -79,7 +78,6 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      {/* Stats Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, i) => (
           <div
@@ -114,9 +112,7 @@ export default async function AdminDashboard() {
         ))}
       </div>
 
-      {/* Bottom Section: Activity & Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Activity Table */}
         <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-2xl font-black flex items-center gap-3">
@@ -131,7 +127,6 @@ export default async function AdminDashboard() {
           </div>
 
           <div className="space-y-6">
-            {/* Mockup Row */}
             {toko?.map((item) => (
               <div
                 key={item.id}
@@ -173,7 +168,6 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick Action Card */}
         <div className="bg-orange-600 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-orange-200 dark:shadow-none flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-32 -mt-32" />
           <div className="relative">

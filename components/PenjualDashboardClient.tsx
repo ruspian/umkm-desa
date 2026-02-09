@@ -11,7 +11,6 @@ const PenjualDashboardClient = ({
 }: PenjualDashboardProps) => {
   return (
     <div className="p-4 md:p-10 space-y-10 max-w-400 mx-auto animate-in fade-in duration-700">
-      {/* Welcome Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-4xl font-black tracking-tight ">
@@ -29,7 +28,6 @@ const PenjualDashboardClient = ({
         </div>
       </div>
 
-      {/* Stats Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, i) => (
           <div
@@ -59,7 +57,6 @@ const PenjualDashboardClient = ({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Chart Placeholder*/}
         <div className="lg:col-span-2 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-black flex items-center gap-2">
@@ -141,7 +138,6 @@ const PenjualDashboardClient = ({
           </div>
         </div>
 
-        {/* Info Card */}
         <div className="bg-gray-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-40 h-40 bg-orange-600 opacity-20 rounded-full -mr-20 -mt-20" />
           <h3 className="text-2xl font-black leading-tight mb-4">
