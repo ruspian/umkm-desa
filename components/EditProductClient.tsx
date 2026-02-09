@@ -154,13 +154,11 @@ export default function EditProductClient({
         className={!verified ? "opacity-60 grayscale-[0.5]" : ""}
       >
         <div className=" rounded-[3rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800 space-y-8">
-          {/*  Foto */}
           <div className="space-y-4">
             <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">
               Foto Produk
             </label>
 
-            {/* Jika sudah ada gambar  */}
             {formData.images ? (
               <div className="relative aspect-video md:aspect-2/1 rounded-[2.5rem] overflow-hidden group border-4 border-gray-50 dark:border-gray-800 shadow-xl">
                 <Image
@@ -171,7 +169,6 @@ export default function EditProductClient({
                   unoptimized
                 />
 
-                {/* Overlay untuk Hapus */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                   <button
                     type="button"
@@ -184,7 +181,6 @@ export default function EditProductClient({
                 </div>
               </div>
             ) : (
-              /* Tampilan Dropzone jika belum ada gambar */
               <label className="border-4 border-dashed border-gray-100 dark:border-gray-800 rounded-[2.5rem] p-12 flex flex-col items-center justify-center group hover:border-orange-200 transition-colors cursor-pointer bg-gray-50/50 dark:bg-gray-800/30">
                 <div className="w-16 h-16 bg-white dark:bg-gray-700 rounded-2xl flex items-center justify-center text-orange-600 shadow-xl group-hover:scale-110 transition-transform mb-4">
                   <ImagePlus size={32} />
@@ -206,7 +202,6 @@ export default function EditProductClient({
             )}
           </div>
 
-          {/* Input Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
               <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">
@@ -322,7 +317,6 @@ export default function EditProductClient({
                   ))}
                 </select>
 
-                {/* Ikon Panah Custom di Sisi Kanan */}
                 <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                   <ChevronDown size={18} strokeWidth={3} />
                 </div>

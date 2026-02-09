@@ -16,7 +16,6 @@ const KurasiTokoClient = ({ daftarToko }: KurasiTokoProps) => {
         </p>
       </header>
 
-      {/* Grid Status Singkat */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white dark:bg-gray-900 p-6 rounded-[2rem] border border-gray-100 dark:border-gray-800">
           <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
@@ -34,7 +33,6 @@ const KurasiTokoClient = ({ daftarToko }: KurasiTokoProps) => {
         </div>
       </div>
 
-      {/* Tabel Kurasi */}
       <div className="bg-white dark:bg-gray-900 rounded-[3rem] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
         <table className="w-full text-left border-collapse">
           <thead>

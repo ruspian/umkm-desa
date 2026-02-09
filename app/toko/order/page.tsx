@@ -15,7 +15,7 @@ export default async function TokoOrderPage() {
 
   if (!toko) return <div>Toko tidak ditemukan.</div>;
 
-  // Ambil semua order milik toko ini
+  // Ambil semua order milik toko in
   const orders = await prisma.order.findMany({
     where: { tokoId: toko.id },
     orderBy: { createdAt: "desc" },
@@ -37,7 +37,6 @@ export default async function TokoOrderPage() {
         </div>
       </div>
 
-      {/* Komponen List Order (Client Side untuk Interaksi Tombol) */}
       <OrderList initialOrders={JSON.parse(JSON.stringify(orders))} />
     </main>
   );

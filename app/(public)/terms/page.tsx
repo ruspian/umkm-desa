@@ -31,7 +31,6 @@ export default function TermsPage() {
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-16">
-      {/* Header Halaman */}
       <div className="text-center space-y-4 mb-20">
         <div className="inline-flex p-4 bg-orange-100 dark:bg-orange-950/30 text-orange-600 rounded-[2rem] mb-4">
           <Scale size={40} />
@@ -45,7 +44,6 @@ export default function TermsPage() {
         </p>
       </div>
 
-      {/* Grid Konten */}
       <div className="grid grid-cols-1 gap-12">
         {sections.map((section, index) => (
           <section
@@ -67,7 +65,6 @@ export default function TermsPage() {
         ))}
       </div>
 
-      {/* Footer Kontak */}
       <div className="mt-20 p-10 bg-gray-900 rounded-[3rem] text-center space-y-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-orange-600/20 blur-3xl" />
         <HelpCircle className="mx-auto text-orange-500" size={48} />

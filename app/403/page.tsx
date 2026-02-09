@@ -36,7 +36,6 @@ export default function AccessDenied() {
           </p>
         </div>
 
-        {/* Tombol Aksi */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
           <Link
             href="/"
@@ -57,7 +56,6 @@ export default function AccessDenied() {
           </button>
         </div>
 
-        {/* Footer */}
         <div className="pt-12 flex items-center justify-center gap-3 opacity-30">
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-500">
             Strict Security Protected

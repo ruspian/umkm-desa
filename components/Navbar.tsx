@@ -74,7 +74,6 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
             />
           </form>
 
-          {/* Menu Aksi */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => setOpenSearch(!openSearch)}

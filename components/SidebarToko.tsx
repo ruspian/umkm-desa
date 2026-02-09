@@ -91,7 +91,6 @@ const SidebarToko = ({ menuItems }: { menuItems: MenuItems[] }) => {
           })}
         </nav>
 
-        {/* Bantuan & Logout Section */}
         <div className="mt-auto space-y-4">
           <div className="px-5 py-2 bg-orange-600 rounded-3xl text-white shadow-xl dark:shadow-none relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 w-16 h-16 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-700" />

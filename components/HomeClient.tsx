@@ -55,7 +55,7 @@ const HomeClient = ({
     }
   };
 
-  // Reusable Product Card Component (Biar kode gak numpuk)
+  // Reusable Product Card Component 
   const RenderProductCard = ({ p }: { p: HomeProductType }) => {
     const price = p.price ?? 0;
     const discount = p.discount ?? 0;
@@ -110,7 +110,7 @@ const HomeClient = ({
 
   return (
     <main className="w-full">
-      {/*  HERO SECTION  */}
+      
       {!isSearching && !isFiltering && (
         <section className="max-w-7xl mx-auto px-4 pt-10 pb-10">
           <div className="relative bg-gray-900 rounded-[3rem] overflow-hidden min-h-125 flex items-center p-8 md:p-20 shadow-2xl">
@@ -142,7 +142,7 @@ const HomeClient = ({
         </section>
       )}
 
-      {/* 2. KATEGORI & FILTER */}
+      
       <section className="max-w-7xl mx-auto px-4 py-10">
         <div className="flex flex-col items-center">
           <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-6">
@@ -152,7 +152,7 @@ const HomeClient = ({
         </div>
       </section>
 
-      {/* 3. FEATURED SECTION (Hanya tampil di Home utama) */}
+      
       {!isSearching && !isFiltering && featuredProducts.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 py-16 bg-orange-50/50 dark:bg-orange-950/10 rounded-[4rem] my-10">
           <div className="flex items-center gap-3 mb-12 ml-4">
@@ -176,7 +176,7 @@ const HomeClient = ({
         </section>
       )}
 
-      {/* semua produk atau hasil pencarian */}
+      
       <section className="max-w-7xl mx-auto px-4 py-20">
         <div className="flex items-center justify-between mb-12">
           <div>
@@ -218,7 +218,7 @@ const HomeClient = ({
         <ProductPagination totalPages={totalPages} currentPage={currentPage} />
       </section>
 
-      {/*WHY SECTION */}
+      
       <section className="px-4 py-24 bg-gray-50 dark:bg-gray-950/30 w-full mt-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           {[

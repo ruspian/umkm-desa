@@ -10,7 +10,7 @@ import TabKeamananUser from "./TabKeamananUser";
 const SettingUserClient = ({ user }: { user: Users }) => {
   const [activeTab, setActiveTab] = useState("Umum");
 
-  // Menu Navigasi
+  
   const menuItems = [
     { label: "Umum", icon: <Globe size={20} /> },
     { label: "Alamat", icon: <MapIcon size={20} /> },
@@ -18,7 +18,7 @@ const SettingUserClient = ({ user }: { user: Users }) => {
   ];
   return (
     <div className="p-4 md:p-10 max-w-400 mx-auto space-y-10 animate-in fade-in duration-700">
-      {/* HEADER SECTION */}
+      
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-gray-100 dark:border-gray-800 pb-10">
         <div>
           <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
@@ -32,7 +32,7 @@ const SettingUserClient = ({ user }: { user: Users }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-        {/* SIDEBAR NAVIGATION */}
+        
         <nav className="flex flex-col gap-2">
           {menuItems.map((item) => (
             <button
@@ -54,9 +54,9 @@ const SettingUserClient = ({ user }: { user: Users }) => {
           ))}
         </nav>
 
-        {/* CONTENT AREA */}
+        
         <div className="lg:col-span-3 min-h-150">
-          {/*  UMUM */}
+         
           {activeTab === "Umum" && <TabUmumUser userSetting={user} />}
 
           {activeTab === "Alamat" && (

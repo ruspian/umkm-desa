@@ -55,7 +55,7 @@ export default async function TokoProfilePage({
     totalProducts: sellerInfo?._count?.products,
   };
 
-  // 1. Olah data produk di dalam map
+  // Olah data produk di dalam map
   const products = sellerInfo?.products.map((product) => {
     const price = product.price ?? 0;
     const discount = product.discount ?? 0;
@@ -74,12 +74,10 @@ export default async function TokoProfilePage({
     };
   });
 
-  // 2. Hitung total halaman
   const totalPage = Math.ceil(seller.totalProducts / ITEMS_PER_PAGE);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
-      {/* Header Profil */}
       <section className="bg-gray-50 dark:bg-gray-900/50 py-16 border-b border-gray-100 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
           <Image
@@ -110,7 +108,6 @@ export default async function TokoProfilePage({
         </div>
       </section>
 
-      {/* Daftar Produk toko */}
       <ProductListSeller
         products={products}
         totalPage={totalPage}

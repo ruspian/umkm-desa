@@ -29,7 +29,6 @@ export default function OrderList({
 
   return (
     <div className="space-y-6">
-      {/* Tab Switcher */}
       <div className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-800 rounded-2xl w-fit">
         <button
           onClick={() => setActiveTab("PENDING")}

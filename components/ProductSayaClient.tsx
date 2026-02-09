@@ -94,7 +94,6 @@ export default function ProductSayaClient({
 
   return (
     <div className="p-4 md:p-10 space-y-10 max-w-400 mx-auto animate-in fade-in duration-700">
-      {/* header dan tombol tambah */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
           <h1 className="text-4xl font-black tracking-tight">
@@ -115,7 +114,6 @@ export default function ProductSayaClient({
         </Link>
       </div>
 
-      {/* Filter & Search Bar */}
       <div className="flex flex-col md:flex-row gap-4 p-4 rounded-[2rem] border border-gray-200 dark:border-gray-200 shadow-sm">
         <div className="relative flex-1 group">
           <Search
@@ -142,7 +140,6 @@ export default function ProductSayaClient({
         </select>
       </div>
 
-      {/* Product List Layout */}
       <div className="grid grid-cols-1 gap-4">
         {products.length > 0 ? (
           products.map((product) => (
@@ -150,7 +147,6 @@ export default function ProductSayaClient({
               key={product.id}
               className="group p-6 rounded-[2.5rem] border border-gray-100 dark:border-orange-500 hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-none transition-all flex flex-col md:flex-row items-center gap-6"
             >
-              {/* Image Preview */}
               <div className="w-full md:w-32 h-32 rounded-3xl overflow-hidden bg-gray-100 shrink-0 border-4 border-gray-50 dark:border-gray-800">
                 <Image
                   src={product.images}
@@ -161,7 +157,6 @@ export default function ProductSayaClient({
                 />
               </div>
 
-              {/* Main Info */}
               <div className="flex-1 space-y-1 text-center md:text-left">
                 <h3 className="text-xl font-black ">{product.nama}</h3>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm font-bold">
@@ -173,7 +168,6 @@ export default function ProductSayaClient({
                 </div>
               </div>
 
-              {/* Status Badge */}
               <div className="shrink-0">
                 {product.status === "Approved" && (
                   <div className="flex items-center gap-2 px-5 py-2.5 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-xs uppercase tracking-tighter border border-emerald-100">
@@ -192,7 +186,6 @@ export default function ProductSayaClient({
                 )}
               </div>
 
-              {/* Actions */}
               <div className="flex items-center gap-2 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 pt-4 md:pt-0 md:pl-6 w-full md:w-auto justify-center">
                 <Link
                   href={`/product/${product.slug}`}

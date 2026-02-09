@@ -37,7 +37,6 @@ export default function CaraBelanjaPage() {
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-16">
-      {/* Header */}
       <div className="text-center mb-20 space-y-4">
         <h1 className="text-5xl font-black italic tracking-tighter">
           Gampang Banget <br />
@@ -49,14 +48,12 @@ export default function CaraBelanjaPage() {
         </p>
       </div>
 
-      {/* Steps Timeline */}
       <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {steps.map((step, index) => (
           <div
             key={index}
             className="relative p-10 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[3rem] shadow-sm hover:shadow-2xl hover:shadow-orange-200/20 transition-all group overflow-hidden"
           >
-            {/* Number Background */}
             <span className="absolute -top-4 -right-4 text-[120px] font-black text-gray-50 dark:text-gray-800/30 group-hover:text-orange-500/10 transition-colors z-0">
               {index + 1}
             </span>
@@ -80,7 +77,6 @@ export default function CaraBelanjaPage() {
         ))}
       </div>
 
-      {/* Call to Action */}
       <div className="mt-24 p-12 bg-gray-900 dark:bg-orange-600 rounded-[4rem] text-center space-y-8 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
@@ -105,7 +101,6 @@ export default function CaraBelanjaPage() {
         </div>
       </div>
 
-      {/* Note Section */}
       <div className="mt-16 text-center">
         <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-bold text-gray-500 uppercase tracking-widest">
           <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />

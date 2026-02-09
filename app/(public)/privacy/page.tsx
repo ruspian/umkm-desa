@@ -37,7 +37,6 @@ export default function PrivacyPage() {
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-16">
-      {/* Header Section */}
       <div className="flex flex-col items-center text-center space-y-6 mb-20">
         <div className="w-20 h-20 bg-orange-600/10 text-orange-600 rounded-[2rem] flex items-center justify-center shadow-inner">
           <Lock size={40} />
@@ -56,7 +55,6 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      {/* Intro Text */}
       <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[3rem] p-10 mb-16 shadow-sm">
         <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
           Kami menghargai privasi Anda dan berkomitmen untuk melindungi
@@ -68,7 +66,6 @@ export default function PrivacyPage() {
         </p>
       </div>
 
-      {/* Privacy Points Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {privacyPoints.map((point, index) => (
           <div
@@ -88,7 +85,6 @@ export default function PrivacyPage() {
         ))}
       </div>
 
-      {/* Cookie Section */}
       <section className="mt-16 p-10 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-[3rem] flex flex-col md:flex-row items-center gap-8">
         <div className="shrink-0 p-5 bg-gray-100 dark:bg-gray-800 rounded-full">
           <ShieldCheck size={32} className="text-emerald-600" />
