@@ -5,66 +5,52 @@ import type { NextRequest } from "next/server";
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Ambil token
   const token = await getToken({
     req,
     secret: process.env.AUTH_SECRET,
   });
 
   const isAuth = !!token;
-  const isAdmin = token?.role === "ADMIN";
+  const role = token?.role as string | undefined;
+  const isAdmin = role === "ADMIN";
 
-  // Tentukan halaman mana yang dikecualikan untuk maintenance
-  const isMaintenancePage = pathname === "/maintenance";
+  // Filter file statis dan API agar tidak terkena middleware
+  const isStaticFile = pathname.includes(".") || pathname.startsWith("/_next");
   const isApiRoute = pathname.startsWith("/api");
-  const isStaticFile = pathname.includes(".");
+  if (isStaticFile || isApiRoute) return NextResponse.next();
 
-  // deklarasi maintenance
-  let isMaintenanceMode = false;
+  // Logika Maintenance
 
-  // Cek maintenance bukan file statis, bukan api, dan bukan halaman maintenance itu sendiri
-  if (!isStaticFile && !isApiRoute && !isMaintenancePage) {
-    try {
-      // Panggil API
-      const response = await fetch(new URL("/api/maintenance", req.url), {
-        cache: "no-store",
-      });
-      const data = await response.json();
+  const isMaintenanceMode = true;
+  const isMaintenancePage = pathname === "/maintenance";
 
-      isMaintenanceMode = data.isMaintenance;
-    } catch (error) {
-      console.error("Terjadi kesalahan:", error);
-      isMaintenanceMode = false;
-    }
+  if (isMaintenanceMode && !isMaintenancePage && !isAdmin) {
+    return NextResponse.redirect(new URL("/maintenance", req.url));
   }
 
-  if (isMaintenanceMode && !isMaintenancePage && !isApiRoute && !isStaticFile) {
-    if (!isAdmin) {
-      return NextResponse.redirect(new URL("/maintenance", req.url));
-    }
-  }
-
+  // Proteksi Halaman Auth
   const isAuthPage =
     pathname.startsWith("/login") || pathname.startsWith("/register");
-
   if (isAuthPage) {
     if (isAuth) return NextResponse.redirect(new URL("/", req.url));
     return NextResponse.next();
   }
 
+  // Proteksi Halaman Admin
   if (pathname.startsWith("/admin")) {
-    if (!token) return NextResponse.redirect(new URL("/login", req.url));
-
+    if (!isAuth) return NextResponse.redirect(new URL("/login", req.url));
     if (!isAdmin) return NextResponse.rewrite(new URL("/403", req.url));
   }
 
+  // Proteksi Halaman Toko
   if (pathname.startsWith("/toko")) {
-    if (!token) return NextResponse.redirect(new URL("/login", req.url));
-    if (token.role !== "PENJUAL" && !isAdmin) {
+    if (!isAuth) return NextResponse.redirect(new URL("/login", req.url));
+    if (role !== "PENJUAL" && !isAdmin) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
 
+  // Proteksi Setting
   if (pathname.startsWith("/setting") && !isAuth) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
@@ -72,6 +58,7 @@ export async function proxy(req: NextRequest) {
   return NextResponse.next();
 }
 
+// Matcher
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
