@@ -21,7 +21,7 @@ export async function proxy(req: NextRequest) {
 
   // Logika Maintenance
 
-  const isMaintenanceMode = true;
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
   const isMaintenancePage = pathname === "/maintenance";
 
   if (isMaintenanceMode && !isMaintenancePage && !isAdmin) {
